@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Newsletter OS v3 — Complete Client Guide</title>
+<style>
+/* ═══ TOKENS ═══════════════════════════════════════════════════ */
+:root{
+  --g900:#010f05;--g800:#032b0d;--g700:#065219;--g600:#0a7a26;
+  --g500:#10a835;--g400:#1ed44a;--g300:#5ee87f;--g200:#9ef4b3;
+  --g100:#d4fbdd;--g050:#f0fdf4;
+  --sb:#020d05;--sr:#061410;--sc:#091c10;--sh:#0e2916;--sbd:#123619;
+  --am:#f0b94a;--amb:rgba(90,55,0,.35);--ambd:rgba(180,110,0,.3);
+  --rd:#f87171;--rdb:rgba(90,20,20,.35);--rdbd:rgba(180,50,50,.3);
+  --bl:#60a5fa;--blb:rgba(20,40,90,.35);--blbd:rgba(60,100,200,.3);
+  --fd:'Georgia','Times New Roman',serif;
+  --fm:'SF Mono','Fira Mono','Consolas',monospace;
+  --xs:11px;--sm:13px;--md:16px;--lg:22px;--xl:32px;
+  --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:40px;--s6:48px;
+  --sh1:0 1px 4px rgba(0,0,0,.55),0 0 0 1px rgba(30,212,74,.06);
+  --sh2:0 4px 16px rgba(0,0,0,.65),0 0 0 1px rgba(30,212,74,.09);
+  --sh3:0 12px 40px rgba(0,0,0,.75),0 0 0 1px rgba(30,212,74,.11);
+  --nh:68px;--iz:24px;--th:56px;
+}
+/* ═══ RESET ════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--sb);color:var(--g200);font-family:var(--fm);font-size:var(--md);line-height:1.65;min-height:100dvh;padding-bottom:calc(var(--nh)+8px);-webkit-font-smoothing:antialiased}
+button{cursor:pointer;border:none;background:none;font-family:inherit;color:inherit}
+ul{list-style:none}
+input,select{font-family:inherit}
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:var(--sb)}
+::-webkit-scrollbar-thumb{background:var(--g700);border-radius:2px}
+:focus-visible{outline:2px solid var(--g400);outline-offset:2px;border-radius:3px}
+/* ═══ TYPE ═════════════════════════════════════════════════════ */
+.td{font-family:var(--fd);font-size:var(--xl);color:var(--g100);line-height:1.08;letter-spacing:-.025em}
+.ts{font-family:var(--fd);font-size:var(--lg);color:var(--g100);line-height:1.2}
+.tb{font-size:var(--md);color:var(--g200);line-height:1.65}
+.tm{font-size:var(--sm);color:var(--g500);line-height:1.6}
+.tx{font-size:var(--xs);color:var(--g600);letter-spacing:.09em;text-transform:uppercase}
+/* ═══ BADGES ═══════════════════════════════════════════════════ */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:3px;font-size:var(--xs);font-family:var(--fm);letter-spacing:.08em;text-transform:uppercase;font-weight:700;white-space:nowrap}
+.bg{background:rgba(10,120,38,.22);color:var(--g300);border:1px solid rgba(10,120,38,.38)}
+.bd{background:rgba(4,49,15,.55);color:var(--g400);border:1px solid var(--sbd)}
+.ba{background:var(--amb);color:var(--am);border:1px solid var(--ambd)}
+.br{background:var(--rdb);color:var(--rd);border:1px solid var(--rdbd)}
+.bb{background:var(--blb);color:var(--bl);border:1px solid var(--blbd)}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;background:var(--sc);border:1px solid var(--sbd);border-radius:3px;font-size:var(--xs);color:var(--g300);letter-spacing:.04em}
+hr.dv{border:none;border-top:1px solid var(--sbd);margin:var(--s3) 0}
+/* ═══ PROGRESS ═════════════════════════════════════════════════ */
+.pt{width:100%;height:5px;background:var(--sbd);border-radius:3px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--g700),var(--g400));border-radius:3px;transition:width .4s ease}
+.ld{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--g400);margin-right:5px;box-shadow:0 0 6px var(--g400);animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+/* ═══ BUTTONS ══════════════════════════════════════════════════ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s1);min-height:44px;padding:0 var(--s3);border-radius:6px;font-size:var(--sm);font-family:var(--fm);letter-spacing:.05em;font-weight:600;transition:background .15s,box-shadow .15s;cursor:pointer}
+.bp{background:var(--g600);color:var(--g050);box-shadow:var(--sh1)}
+.bp:hover{background:var(--g500);box-shadow:var(--sh2)}
+.bgh{background:transparent;color:var(--g400);border:1px solid var(--sbd)}
+.bgh:hover{background:var(--sh);border-color:var(--g600)}
+/* ═══ CHECKBOX ═════════════════════════════════════════════════ */
+.chk{display:grid;grid-template-columns:20px 1fr;gap:var(--s1);align-items:start;min-height:44px;padding:var(--s1) 0}
+.chk input[type=checkbox]{appearance:none;-webkit-appearance:none;width:20px;height:20px;min-width:20px;margin-top:2px;border:2px solid var(--g700);border-radius:4px;background:var(--sc);cursor:pointer;transition:background .15s,border-color .15s;position:relative}
+.chk input:checked{background:var(--g600);border-color:var(--g500)}
+.chk input:checked::after{content:'';position:absolute;top:3px;left:6px;width:5px;height:9px;border:2px solid var(--g050);border-top:none;border-left:none;transform:rotate(45deg)}
+.chk label{cursor:pointer;font-size:var(--sm);color:var(--g200);line-height:1.5;padding-top:1px}
+.chk input:checked+label{color:var(--g400);text-decoration:line-through;opacity:.6}
+/* ═══ SELECT ═══════════════════════════════════════════════════ */
+.sw{position:relative;display:inline-block}
+.sw::after{content:'';position:absolute;right:13px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--g400);pointer-events:none}
+.sw select{appearance:none;-webkit-appearance:none;min-height:44px;padding:0 42px 0 var(--s2);background:var(--sc);color:var(--g200);border:1px solid var(--sbd);border-radius:6px;font-size:var(--sm);font-family:var(--fm);cursor:pointer;transition:border-color .15s;width:100%}
+.sw select:focus,.sw select:hover{border-color:var(--g600)}
+/* ═══ CARDS ════════════════════════════════════════════════════ */
+.card{background:var(--sc);border:1px solid var(--sbd);border-radius:10px;padding:var(--s3);box-shadow:var(--sh1)}
+/* ═══ LOG GRID ═════════════════════════════════════════════════ */
+.log{display:grid;grid-template-columns:130px 1fr auto;gap:var(--s2);align-items:center;min-height:44px;padding:9px 0;border-bottom:1px solid var(--sbd)}
+.log:last-child{border-bottom:none}
+.lk{font-size:var(--xs);color:var(--g500);letter-spacing:.08em;text-transform:uppercase;line-height:1.4}
+.lv{font-size:var(--sm);color:var(--g200);line-height:1.5}
+/* ═══ ACCORDION ════════════════════════════════════════════════ */
+.mod{border:1px solid var(--sbd);border-radius:8px;overflow:hidden;margin-bottom:6px;transition:border-color .2s,box-shadow .2s}
+.mod:hover{border-color:var(--g700)}
+.mod.open{border-color:var(--g700);box-shadow:var(--sh1)}
+.mb2{width:100%;min-height:52px;display:grid;grid-template-columns:44px 1fr auto;gap:var(--s1);align-items:center;padding:var(--s1) var(--s2);background:var(--sc);text-align:left;font-family:var(--fm);font-size:var(--sm);color:var(--g300);transition:background .15s,color .15s}
+.mb2:hover,.mod.open .mb2{background:var(--sh);color:var(--g100)}
+.mn{font-size:var(--xs);color:var(--g500);font-weight:700;letter-spacing:.1em;width:36px;text-align:center}
+.mm{display:flex;flex-direction:column;gap:2px}
+.mc{font-size:var(--xs);color:var(--g600);letter-spacing:.08em;text-transform:uppercase}
+.mt2{font-size:var(--sm);color:var(--g200);font-weight:600}
+.mod.open .mb2 .mt2{color:var(--g100)}
+.mch{width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:var(--g600);transition:transform .2s}
+.mod.open .mch{transform:rotate(180deg);color:var(--g400)}
+.mch svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round}
+.mbd{display:none;background:var(--sb);border-top:1px solid var(--sbd);padding:var(--s3)}
+.mod.open .mbd{display:block;animation:fi .18s ease}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+/* ═══ FLOWS ════════════════════════════════════════════════════ */
+.flow{display:grid;grid-template-columns:40px 1fr;gap:var(--s2);margin-bottom:var(--s2)}
+.fn{width:40px;height:40px;border-radius:8px;background:rgba(10,120,38,.13);border:1px solid var(--g700);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:var(--md);font-weight:700;color:var(--g400);flex-shrink:0}
+.fd2{padding-top:6px}
+.ft{font-size:var(--sm);color:var(--g100);font-weight:600;margin-bottom:3px}
+.fs{font-size:var(--xs);color:var(--g500);line-height:1.6}
+/* ═══ PILLAR ═══════════════════════════════════════════════════ */
+.pillar{background:var(--sc);border:1px solid var(--sbd);border-radius:8px;padding:var(--s2);margin-bottom:var(--s2);display:grid;grid-template-columns:40px 1fr;gap:var(--s2);align-items:start;transition:border-color .15s}
+.pillar:hover{border-color:var(--g700)}
+.pi{width:40px;height:40px;border-radius:8px;background:rgba(10,120,38,.14);display:flex;align-items:center;justify-content:center;font-size:18px;border:1px solid rgba(10,120,38,.22);flex-shrink:0}
+.pt2{font-size:var(--sm);color:var(--g100);font-weight:600;margin-bottom:4px}
+.ps{font-size:var(--xs);color:var(--g500);line-height:1.6}
+/* ═══ TOOL ROW ═════════════════════════════════════════════════ */
+.tool{display:grid;grid-template-columns:36px 1fr auto;gap:var(--s2);align-items:center;min-height:52px;padding:10px var(--s2);border-radius:6px;border:1px solid var(--sbd);background:var(--sc);margin-bottom:6px;transition:border-color .15s,background .15s}
+.tool:hover{border-color:var(--g700);background:var(--sh)}
+.ti{width:32px;height:32px;border-radius:6px;background:rgba(10,120,38,.14);display:flex;align-items:center;justify-content:center;font-size:15px}
+.tn{font-size:var(--sm);color:var(--g200);font-weight:600}
+.tr{font-size:var(--xs);color:var(--g600);margin-top:2px}
+/* ═══ METRICS ══════════════════════════════════════════════════ */
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:var(--s2);margin-bottom:var(--s3)}
+.mcard{background:var(--sc);border:1px solid var(--sbd);border-radius:8px;padding:var(--s2);text-align:center}
+.mv{font-family:var(--fd);font-size:var(--xl);color:var(--g400);line-height:1;margin-bottom:4px}
+.ml{font-size:var(--xs);color:var(--g600);text-transform:uppercase;letter-spacing:.1em}
+/* ═══ PATH CARDS ═══════════════════════════════════════════════ */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s2);margin-bottom:var(--s3)}
+@media(max-width:400px){.pgrid{grid-template-columns:1fr}}
+.pc{background:var(--sc);border:1px solid var(--sbd);border-radius:8px;padding:var(--s2);cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s;position:relative;overflow:hidden}
+.pc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--g700),var(--g400));opacity:0;transition:opacity .2s}
+.pc:hover{border-color:var(--g700);background:var(--sh);box-shadow:var(--sh1)}
+.pc:hover::before{opacity:1}
+.pci{font-size:20px;margin-bottom:6px}
+.pct{font-size:var(--sm);color:var(--g100);font-weight:600;margin-bottom:3px}
+.pcs{font-size:var(--xs);color:var(--g600)}
+/* ═══ PHASE TIMELINE ═══════════════════════════════════════════ */
+.prow{display:grid;grid-template-columns:72px 1fr;gap:var(--s2);margin-bottom:var(--s2)}
+.pmk{display:flex;flex-direction:column;align-items:center;gap:3px}
+.pdot{width:32px;height:32px;border-radius:50%;background:var(--sc);border:2px solid var(--g700);display:flex;align-items:center;justify-content:center;font-size:var(--xs);color:var(--g400);font-weight:700;flex-shrink:0}
+.pln{width:2px;flex:1;min-height:14px;background:linear-gradient(180deg,var(--g700),transparent)}
+.pnm{font-size:var(--sm);color:var(--g100);font-weight:600;margin-bottom:3px;padding-top:4px}
+.pds{font-size:var(--xs);color:var(--g500);line-height:1.55}
+/* ═══ HANDOFF ══════════════════════════════════════════════════ */
+.hoff{display:grid;grid-template-columns:1fr auto;gap:var(--s2);align-items:center;min-height:48px;padding:10px 0;border-bottom:1px solid var(--sbd)}
+.hoff:last-child{border-bottom:none}
+.ht{font-size:var(--sm);color:var(--g200)}
+.hs{font-size:var(--xs);color:var(--g600);margin-top:2px}
+/* ═══ SECTION HEADER ═══════════════════════════════════════════ */
+.shd{display:flex;align-items:flex-start;gap:var(--s2);margin-bottom:var(--s3)}
+.sic{width:40px;height:40px;border-radius:8px;background:rgba(10,120,38,.18);border:1px solid rgba(10,120,38,.28);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.slb{font-size:var(--xs);color:var(--g400);letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px}
+/* ═══ CALLOUT ══════════════════════════════════════════════════ */
+.co{border-left:3px solid var(--g600);background:rgba(10,120,38,.07);border-radius:0 6px 6px 0;padding:var(--s2);margin:var(--s2) 0}
+.cow{border-left-color:var(--am);background:var(--amb)}
+.cor{border-left-color:var(--rd);background:var(--rdb)}
+.cob{border-left-color:var(--bl);background:var(--blb)}
+.co p,.cow p,.cor p,.cob p{font-size:var(--sm);line-height:1.6}
+.co strong{color:var(--g300)}
+.cow strong{color:var(--am)}
+.cor strong{color:var(--rd)}
+.cob strong{color:var(--bl)}
+/* ═══ SCORE BAR ════════════════════════════════════════════════ */
+.srow{display:grid;grid-template-columns:120px 1fr 40px;gap:var(--s2);align-items:center;min-height:36px}
+.slbl{font-size:var(--xs);color:var(--g500);text-transform:uppercase;letter-spacing:.07em}
+.sbw{height:8px;background:var(--sbd);border-radius:4px;overflow:hidden}
+.sb{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--g700),var(--g400))}
+.sn{font-size:var(--xs);color:var(--g400);font-weight:700;text-align:right}
+/* ═══ REV TABLE ════════════════════════════════════════════════ */
+.rt{display:grid;border:1px solid var(--sbd);border-radius:8px;overflow:hidden}
+.rh{display:contents}
+.rh div{background:rgba(10,120,38,.1);padding:9px var(--s2);font-size:var(--xs);color:var(--g500);text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid var(--sbd)}
+.rr{display:contents}
+.rr div{padding:11px var(--s2);font-size:var(--sm);color:var(--g200);border-bottom:1px solid rgba(18,54,25,.5);display:flex;align-items:center}
+.rr:last-child div{border-bottom:none}
+.rr div:nth-child(2),.rr div:nth-child(3),.rr div:nth-child(4){color:var(--g400);font-weight:600}
+/* ═══ FORMULA ══════════════════════════════════════════════════ */
+.formula{background:var(--sb);border:1px solid var(--g700);border-radius:8px;padding:var(--s3);margin:var(--s2) 0;text-align:center}
+.feq{font-family:var(--fd);font-size:var(--lg);color:var(--g300);margin-bottom:var(--s1)}
+.fds{font-size:var(--xs);color:var(--g600);line-height:1.8}
+/* ═══ CODE BLOCK ═══════════════════════════════════════════════ */
+.cb{background:var(--sb);border:1px solid var(--g700);border-radius:6px;padding:var(--s2);font-size:var(--xs);color:var(--g400);font-family:var(--fm);line-height:2;overflow-x:auto}
+.cb .cm{color:var(--g700)}
+.cb .ck{color:var(--g300)}
+.cb .cv{color:var(--am)}
+.cb .cs{color:var(--rd)}
+/* ═══ SPAM ROW ═════════════════════════════════════════════════ */
+.sprow{display:grid;grid-template-columns:1fr auto;align-items:center;min-height:40px;padding:8px 0;border-bottom:1px solid var(--sbd)}
+.sprow:last-child{border-bottom:none}
+.spf{font-size:var(--sm);color:var(--g200)}
+.spi{font-size:var(--xs);padding:2px 6px;border-radius:3px;font-weight:600}
+.hi{background:rgba(90,20,20,.4);color:var(--rd);border:1px solid var(--rdbd)}
+.mid{background:var(--amb);color:var(--am);border:1px solid var(--ambd)}
+.lo{background:rgba(10,120,38,.2);color:var(--g300);border:1px solid rgba(10,120,38,.35)}
+/* ═══ SUBJECT LINE CARD ════════════════════════════════════════ */
+.slc{background:var(--sc);border:1px solid var(--sbd);border-radius:6px;padding:var(--s2);margin-bottom:6px;display:grid;grid-template-columns:24px 1fr auto;gap:var(--s1);align-items:center;transition:border-color .15s}
+.slc:hover{border-color:var(--g700)}
+.sln{font-size:var(--xs);color:var(--g600);font-weight:700;width:20px}
+.slt{font-size:var(--sm);color:var(--g200)}
+.sltp{font-size:var(--xs);color:var(--g600)}
+/* ═══ MARQUEE ══════════════════════════════════════════════════ */
+.mq{overflow:hidden;border-top:1px solid var(--sbd);border-bottom:1px solid var(--sbd);padding:7px 0;background:rgba(4,49,15,.28)}
+.mqi{display:flex;gap:var(--s4);animation:sc 50s linear infinite;white-space:nowrap}
+.mqi span{font-size:var(--xs);color:var(--g600)}
+.mqi span strong{color:var(--g500)}
+@keyframes sc{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* ═══ PROMPT BLOCK ═════════════════════════════════════════════ */
+.prompt-block{background:rgba(2,13,5,.8);border:1px solid var(--g700);border-radius:8px;padding:var(--s3);margin:var(--s2) 0;position:relative}
+.prompt-label{position:absolute;top:-9px;left:var(--s2);background:var(--sb);padding:0 6px;font-size:var(--xs);color:var(--g500);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--g700);border-radius:3px}
+.prompt-text{font-size:var(--xs);color:var(--g300);font-family:var(--fm);line-height:1.9;white-space:pre-wrap}
+.prompt-var{color:var(--am)}
+.prompt-comment{color:var(--g700)}
+/* ═══ EMAIL TEMPLATE PREVIEW ═══════════════════════════════════ */
+.ep{background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:var(--sh2);margin:var(--s2) 0}
+.ep-bar{background:#f3f4f6;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #e5e7eb}
+.ep-dot{width:10px;height:10px;border-radius:50%}
+.ep-body{padding:var(--s3);font-family:'Georgia',serif;background:#ffffff}
+.ep-header{background:#0a1a0e;padding:var(--s2) var(--s3);text-align:center;margin:-var(--s3) -var(--s3) var(--s3) -var(--s3)}
+.ep-logo{font-size:11px;color:var(--g400);letter-spacing:.2em;text-transform:uppercase;margin-bottom:4px}
+.ep-title{font-size:18px;color:var(--g100);font-family:'Georgia',serif;margin-bottom:4px}
+.ep-issue{font-size:10px;color:var(--g600);letter-spacing:.15em;text-transform:uppercase}
+.ep-divider{height:1px;background:#e5e7eb;margin:var(--s2) 0}
+.ep-section-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:6px;font-family:'SF Mono','Consolas',monospace}
+.ep-h1{font-size:20px;color:#111827;line-height:1.25;margin-bottom:8px;font-family:'Georgia',serif}
+.ep-p{font-size:13px;color:#374151;line-height:1.7;margin-bottom:10px}
+.ep-signal{background:#f9fafb;border-left:3px solid #10a835;padding:10px 12px;margin-bottom:8px;border-radius:0 4px 4px 0}
+.ep-signal-title{font-size:12px;font-weight:600;color:#111827;margin-bottom:3px;font-family:'Georgia',serif}
+.ep-signal-desc{font-size:11px;color:#6b7280;line-height:1.5}
+.ep-cta{background:#0a7a26;padding:12px 24px;border-radius:6px;display:inline-block;font-size:12px;color:#fff;font-family:'SF Mono','Consolas',monospace;letter-spacing:.05em;margin:var(--s2) auto;text-align:center}
+.ep-footer{background:#f9fafb;padding:var(--s2);border-top:1px solid #e5e7eb;font-size:10px;color:#9ca3af;text-align:center;line-height:1.6}
+/* ═══ SPONSOR CRM ══════════════════════════════════════════════ */
+.crm-row{display:grid;grid-template-columns:1fr auto auto auto;gap:var(--s1);align-items:center;min-height:44px;padding:8px var(--s2);background:var(--sc);border:1px solid var(--sbd);border-radius:6px;margin-bottom:4px;transition:border-color .15s}
+.crm-row:hover{border-color:var(--g700)}
+.crm-name{font-size:var(--sm);color:var(--g200);font-weight:600}
+.crm-detail{font-size:var(--xs);color:var(--g600);margin-top:2px}
+/* ═══ SEO TABLE ════════════════════════════════════════════════ */
+.seo-row{display:grid;grid-template-columns:160px 1fr auto;gap:var(--s2);align-items:center;min-height:44px;padding:9px 0;border-bottom:1px solid var(--sbd)}
+.seo-row:last-child{border-bottom:none}
+.seo-k{font-size:var(--xs);color:var(--g500);letter-spacing:.08em;text-transform:uppercase}
+.seo-v{font-size:var(--sm);color:var(--g200);line-height:1.5}
+/* ═══ TOPBAR ═══════════════════════════════════════════════════ */
+.topbar{position:sticky;top:0;z-index:100;height:var(--th);background:rgba(2,13,5,.93);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--sbd);padding:0 var(--s3);display:flex;align-items:center;justify-content:space-between}
+.tbb{display:flex;align-items:center;gap:10px}
+.tbl{width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,var(--g700),var(--g500));display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 0 14px rgba(30,212,74,.22)}
+.tbn{font-family:var(--fd);font-size:var(--md);color:var(--g100);letter-spacing:-.01em}
+.tbv{font-size:var(--xs);color:var(--g400);padding:2px 6px;background:rgba(10,120,38,.18);border:1px solid rgba(10,120,38,.28);border-radius:3px;letter-spacing:.06em}
+/* ═══ GLOBAL PROGRESS BAR ══════════════════════════════════════ */
+.gbar{padding:10px var(--s3) 8px;background:var(--sr);border-bottom:1px solid var(--sbd)}
+.gbr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.gbl{font-size:var(--xs);color:var(--g600);letter-spacing:.07em;text-transform:uppercase}
+.gbp{font-size:var(--sm);color:var(--g400);font-weight:700}
+/* ═══ PAGES ════════════════════════════════════════════════════ */
+#app{max-width:680px;margin:0 auto}
+.page{display:none;padding:var(--s3);animation:fi .2s ease}
+.page.active{display:block}
+/* ═══ BOTTOM NAV ═══════════════════════════════════════════════ */
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(2,13,5,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--sbd);height:var(--nh);display:flex;align-items:center}
+.bni{max-width:680px;margin:0 auto;width:100%;display:grid;grid-template-columns:repeat(7,1fr);height:100%}
+.nb{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:44px;position:relative;color:var(--g700);transition:color .15s;padding:6px 2px}
+.nb::before{content:'';position:absolute;top:0;left:15%;right:15%;height:2px;background:var(--g400);border-radius:0 0 2px 2px;opacity:0;transition:opacity .15s;box-shadow:0 0 10px var(--g400)}
+.niw{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:7px;transition:background .15s}
+.niw svg{width:var(--iz);height:var(--iz);fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.nlb{font-size:8px;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.nb.active{color:var(--g400)}
+.nb.active::before{opacity:1}
+.nb.active .niw{background:rgba(30,212,74,.13)}
+.nb:hover{color:var(--g300)}
+.nb:hover .niw{background:rgba(30,212,74,.07)}
+/* ═══ UTILS ════════════════════════════════════════════════════ */
+.mt1{margin-top:var(--s1)}.mt2{margin-top:var(--s2)}.mt3{margin-top:var(--s3)}
+.mb1{margin-bottom:var(--s1)}.mb2{margin-bottom:var(--s2)}.mb3{margin-bottom:var(--s3)}
+.fx{display:flex}.fw{flex-wrap:wrap}.g1{gap:var(--s1)}.g2{gap:var(--s2)}.ac{align-items:center}.jb{justify-content:space-between}
+.hl{color:var(--g300);font-weight:600}
+.cgtt{font-size:var(--xs);color:var(--g500);text-transform:uppercase;letter-spacing:.1em;margin-bottom:var(--s1);padding-bottom:var(--s1);border-bottom:1px solid var(--sbd)}
+/* Hero */
+.hero{padding:var(--s4) 0 var(--s3);text-align:center}
+.heb{display:inline-flex;align-items:center;gap:6px;background:rgba(30,212,74,.1);border:1px solid rgba(30,212,74,.25);padding:4px 12px;border-radius:20px;font-size:var(--xs);color:var(--g400);letter-spacing:.08em;margin-bottom:var(--s1)}
+.hee{display:inline-block;font-size:var(--xs);letter-spacing:.16em;text-transform:uppercase;color:var(--g600);margin-bottom:var(--s2);padding:4px 12px;border:1px solid var(--sbd);border-radius:20px}
+.hes{font-size:var(--sm);color:var(--g500);max-width:420px;margin:var(--s1) auto var(--s3);line-height:1.75}
+.hec{display:flex;gap:var(--s1);justify-content:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ─── TOPBAR ──────────────────────────────────────────────── -->
+<header class="topbar">
+  <div class="tbb">
+    <div class="tbl">⚡</div>
+    <span class="tbn">AI Newsletter OS</span>
+  </div>
+  <div class="fx ac g1">
+    <span class="tbv">v3.0</span>
+    <div class="sw" style="min-width:110px">
+      <select aria-label="Jump to section" onchange="jp(this.value)">
+        <option value="">Jump…</option>
+        <option value="overview">Overview</option>
+        <option value="modules">Modules</option>
+        <option value="prompts">AI Prompts</option>
+        <option value="template">Email Template</option>
+        <option value="sponsor">Sponsor Sales</option>
+        <option value="paid">Paid Copy</option>
+        <option value="seo">SEO Archive</option>
+        <option value="deliverability">Deliverability</option>
+        <option value="acquisition">Acquisition</option>
+        <option value="copywriting">Copywriting</option>
+        <option value="checklist">Checklist</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<!-- ─── GLOBAL PROGRESS ─────────────────────────────────────── -->
+<div class="gbar">
+  <div class="gbr">
+    <span class="gbl"><span class="ld"></span>Overall Progress</span>
+    <span class="gbp" id="gPct">0%</span>
+  </div>
+  <div class="pt"><div class="pf" id="gFill" style="width:0%"></div></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: OVERVIEW
+══════════════════════════════════════════════════════════ -->
+<main class="page active" id="page-overview">
+  <div class="hero">
+    <div class="heb">✦ Version 3.0 — 95%+ Complete</div>
+    <span class="hee">Complete Client Delivery System</span>
+    <h1 class="td" style="margin-bottom:var(--s1)">Tech AI Automation<br>Newsletter OS</h1>
+    <p class="hes">The only guide you need to architect, build, automate, and scale a revenue-generating AI newsletter — from client discovery to full operational handoff. Now includes AI Prompt Library, Email HTML Template, Sponsor Sales System, Paid Tier Copy, and SEO Archive Strategy.</p>
+    <div class="hec">
+      <button class="btn bp" onclick="sp('modules')">Start Learning Path</button>
+      <button class="btn bgh" onclick="sp('prompts')">AI Prompt Library</button>
+      <button class="btn bgh" onclick="sp('checklist')">Checklist</button>
+    </div>
+  </div>
+
+  <div class="mq" aria-hidden="true">
+    <div class="mqi">
+      <span><strong>15</strong> Core Modules</span><span>·</span><span><strong>AI</strong> Prompt Library</span><span>·</span><span><strong>Email</strong> HTML Template</span><span>·</span><span><strong>Sponsor</strong> Sales System</span><span>·</span><span><strong>Paid Tier</strong> Copy System</span><span>·</span><span><strong>SEO</strong> Archive Strategy</span><span>·</span><span><strong>Deliverability</strong> Setup</span><span>·</span><span><strong>Acquisition</strong> Playbook</span><span>·</span><span><strong>70+</strong> Checklist Items</span><span>·</span><span><strong>Community</strong> Loops</span><span>·</span><span><strong>Analytics</strong> Framework</span><span>·</span>
+      <span><strong>15</strong> Core Modules</span><span>·</span><span><strong>AI</strong> Prompt Library</span><span>·</span><span><strong>Email</strong> HTML Template</span><span>·</span><span><strong>Sponsor</strong> Sales System</span><span>·</span><span><strong>Paid Tier</strong> Copy System</span><span>·</span><span><strong>SEO</strong> Archive Strategy</span><span>·</span><span><strong>Deliverability</strong> Setup</span><span>·</span><span><strong>Acquisition</strong> Playbook</span><span>·</span><span><strong>70+</strong> Checklist Items</span><span>·</span><span><strong>Community</strong> Loops</span><span>·</span><span><strong>Analytics</strong> Framework</span>
+    </div>
+  </div>
+
+  <div class="mgrid mt3">
+    <div class="mcard"><div class="mv">15</div><div class="ml">Modules</div></div>
+    <div class="mcard"><div class="mv">5</div><div class="ml">New in v3</div></div>
+    <div class="mcard"><div class="mv">70+</div><div class="ml">Checklist</div></div>
+    <div class="mcard"><div class="mv">95%</div><div class="ml">Coverage</div></div>
+    <div class="mcard"><div class="mv">12</div><div class="ml">Prompts</div></div>
+  </div>
+
+  <!-- v3 Coverage -->
+  <div class="card mb3">
+    <div class="shd"><div class="sic">📊</div><div><div class="slb">v3 Coverage Map</div><h2 class="ts">What This Guide Teaches</h2></div></div>
+    <div class="srow mb1"><span class="slbl">Strategy</span><div class="sbw"><div class="sb" style="width:96%"></div></div><span class="sn">96%</span></div>
+    <div class="srow mb1"><span class="slbl">Deliverability</span><div class="sbw"><div class="sb" style="width:95%"></div></div><span class="sn">95%</span></div>
+    <div class="srow mb1"><span class="slbl">AI Prompting</span><div class="sbw"><div class="sb" style="width:94%"></div></div><span class="sn">94%</span></div>
+    <div class="srow mb1"><span class="slbl">Email Template</span><div class="sbw"><div class="sb" style="width:95%"></div></div><span class="sn">95%</span></div>
+    <div class="srow mb1"><span class="slbl">Acquisition</span><div class="sbw"><div class="sb" style="width:90%"></div></div><span class="sn">90%</span></div>
+    <div class="srow mb1"><span class="slbl">Copywriting</span><div class="sbw"><div class="sb" style="width:92%"></div></div><span class="sn">92%</span></div>
+    <div class="srow mb1"><span class="slbl">Sponsor Sales</span><div class="sbw"><div class="sb" style="width:93%"></div></div><span class="sn">93%</span></div>
+    <div class="srow mb1"><span class="slbl">Paid Tier Copy</span><div class="sbw"><div class="sb" style="width:92%"></div></div><span class="sn">92%</span></div>
+    <div class="srow mb1"><span class="slbl">SEO Archive</span><div class="sbw"><div class="sb" style="width:91%"></div></div><span class="sn">91%</span></div>
+    <div class="srow mb1"><span class="slbl">Monetization</span><div class="sbw"><div class="sb" style="width:95%"></div></div><span class="sn">95%</span></div>
+    <div class="srow"><span class="slbl">Legal</span><div class="sbw"><div class="sb" style="width:90%"></div></div><span class="sn">90%</span></div>
+  </div>
+
+  <!-- Navigation grid -->
+  <div class="shd"><div class="sic">🧭</div><div><div class="slb">Navigation</div><h2 class="ts">All Sections</h2></div></div>
+  <div class="pgrid">
+    <div class="pc" onclick="sp('modules')" tabindex="0" role="button"><div class="pci">📋</div><div class="pct">Core Modules</div><div class="pcs">15 framework modules</div></div>
+    <div class="pc" onclick="sp('prompts')" tabindex="0" role="button"><div class="pci">🤖</div><div class="pct">AI Prompt Library</div><div class="pcs">12 production prompts · NEW</div></div>
+    <div class="pc" onclick="sp('template')" tabindex="0" role="button"><div class="pci">📧</div><div class="pct">Email Template</div><div class="pcs">HTML + structure guide · NEW</div></div>
+    <div class="pc" onclick="sp('sponsor')" tabindex="0" role="button"><div class="pci">🤝</div><div class="pct">Sponsor Sales</div><div class="pcs">Media kit + outreach · NEW</div></div>
+    <div class="pc" onclick="sp('paid')" tabindex="0" role="button"><div class="pci">💎</div><div class="pct">Paid Tier Copy</div><div class="pcs">Upgrade + paywall copy · NEW</div></div>
+    <div class="pc" onclick="sp('seo')" tabindex="0" role="button"><div class="pci">🔎</div><div class="pct">SEO Archive</div><div class="pcs">Keyword + structure · NEW</div></div>
+    <div class="pc" onclick="sp('deliverability')" tabindex="0" role="button"><div class="pci">📡</div><div class="pct">Deliverability</div><div class="pcs">DNS, warmup, spam</div></div>
+    <div class="pc" onclick="sp('acquisition')" tabindex="0" role="button"><div class="pci">📈</div><div class="pct">Acquisition</div><div class="pcs">Growth playbook</div></div>
+    <div class="pc" onclick="sp('copywriting')" tabindex="0" role="button"><div class="pci">✍️</div><div class="pct">Copywriting</div><div class="pcs">Subject lines + CTAs</div></div>
+    <div class="pc" onclick="sp('checklist')" tabindex="0" role="button"><div class="pci">✅</div><div class="pct">Checklist</div><div class="pcs">70+ action items</div></div>
+  </div>
+</main>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: MODULES (Core 10)
+══════════════════════════════════════════════════════════ -->
+<main class="page" id="page-modules">
+  <div class="shd mt2"><div class="sic">📋</div><div><div class="slb">Learning Path</div><h2 class="ts">Core Modules</h2></div></div>
+  <p class="tm mb3">10 foundational modules — strategy through handoff. Expand each module to access its full framework layer.</p>
+
+  <div class="mod" id="m01"><button class="mb2" onclick="tog('m01')" aria-expanded="false"><div class="mn">01</div><div class="mm"><span class="mc">Phase 1 · Discovery</span><span class="mt2">Client Discovery Framework</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd"><div class="fx fw g1 mb2"><span class="badge bg">Phase 1</span><span class="badge bd">Discovery</span></div>
+    <div class="log"><span class="lk">Client Industry</span><span class="lv">Define vertical, sub-niche, competitive landscape. Map who is already winning and why.</span><span class="badge bd">Input</span></div>
+    <div class="log"><span class="lk">Target ICP</span><span class="lv">Role, seniority, pain points, content habits, decision authority, daily tools used</span><span class="badge bd">Define</span></div>
+    <div class="log"><span class="lk">Existing Assets</span><span class="lv">Audit: email list, content archive, brand guide, CRM, social accounts, domain reputation</span><span class="badge bd">Audit</span></div>
+    <div class="log"><span class="lk">Goals &amp; KPIs</span><span class="lv">Revenue target, subscriber goal, open rate baseline, engagement rate, timeline, budget ceiling</span><span class="badge bd">Set</span></div>
+    <div class="log"><span class="lk">Competitor Map</span><span class="lv">Audit 5 newsletters: format, cadence, tone, monetization model, CTR signals, growth estimate</span><span class="badge bd">Research</span></div>
+    <hr class="dv">
+    <p class="tm"><span class="hl">Deliverables:</span> Client Brief · Competitor Report · ICP Persona Sheet · Opportunity Map</p>
+  </div></div>
+
+  <div class="mod" id="m02"><button class="mb2" onclick="tog('m02')" aria-expanded="false"><div class="mn">02</div><div class="mm"><span class="mc">Phase 1 · Strategy</span><span class="mt2">Newsletter Positioning Strategy</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd"><div class="fx fw g1 mb2"><span class="badge bg">Phase 1</span><span class="badge bd">Strategy</span></div>
+    <div class="log"><span class="lk">Niche Thesis</span><span class="lv">"The newsletter for [ICP] who need [outcome] without [friction]" — one sentence only</span><span class="badge bd">Define</span></div>
+    <div class="log"><span class="lk">Content Angle</span><span class="lv">Curated Intel · Tactical How-To · Opinion POV · Case Studies · Trend Analysis — pick ONE primary</span><span class="badge bd">Choose</span></div>
+    <div class="log"><span class="lk">Voice Architecture</span><span class="lv">Tone profile 1–5: Authoritative↔Conversational · Dense↔Skimmable · Technical↔Accessible</span><span class="badge bd">Map</span></div>
+    <div class="log"><span class="lk">Brand Vocabulary</span><span class="lv">10 words always used · 10 words never used · Embed in every AI system prompt</span><span class="badge bd">Build</span></div>
+    <div class="log"><span class="lk">Positioning Matrix</span><span class="lv">Plot on: Content Depth (Surface→Deep) × Audience Sophistication (General→Expert)</span><span class="badge bd">Plot</span></div>
+  </div></div>
+
+  <div class="mod" id="m03"><button class="mb2" onclick="tog('m03')" aria-expanded="false"><div class="mn">03</div><div class="mm"><span class="mc">Phase 2 · Design</span><span class="mt2">Editorial System Design</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd"><div class="fx fw g1 mb2"><span class="badge bg">Phase 2</span><span class="badge bd">Design</span></div>
+    <div class="flow"><div class="fn">1</div><div class="fd2"><div class="ft">Lead Story Block</div><div class="fs">One headline · one paragraph summary · one key takeaway. AI-assisted first draft, human-edited final. This is the pillar content of every issue.</div></div></div>
+    <div class="flow"><div class="fn">2</div><div class="fd2"><div class="ft">Signal Section (3–5 Items)</div><div class="fs">Curated AI/tech items. Each: source · one-line context · relevance tag. AI-scored, human-curated. Never more than 5 — scarcity increases value perception.</div></div></div>
+    <div class="flow"><div class="fn">3</div><div class="fd2"><div class="ft">Tool Spotlight</div><div class="fs">Framework: What → Use Case → Who Benefits → Integration Path → Limitation. One tool only. AI drafts, human validates every claim.</div></div></div>
+    <div class="flow"><div class="fn">4</div><div class="fd2"><div class="ft">Automation Workflow</div><div class="fs">Trigger → Steps → Output → Time Saved. Include a prompt snippet or config. This section alone justifies paid subscriptions.</div></div></div>
+    <div class="flow"><div class="fn">5</div><div class="fd2"><div class="ft">Rotating CTA Engine</div><div class="fs">Week 1: referral · Week 2: sponsor · Week 3: paid tier upgrade · Week 4: product or community. Rotate strictly — never two consecutive identical CTAs.</div></div></div>
+    <hr class="dv">
+    <div class="log"><span class="lk">Cadence</span><span class="lv">Weekly recommended · Bi-weekly minimum · Daily digest premium only</span><span class="badge bd">Set</span></div>
+    <div class="log"><span class="lk">Word Count</span><span class="lv">Free: 400–700 words · Paid: 1,200–2,000 words with gated deep dive</span><span class="badge bd">Scope</span></div>
+    <div class="log"><span class="lk">Template Lock</span><span class="lv">All layout sections locked. Never design from scratch per issue — consistent template builds brand recognition.</span><span class="badge bd">Build</span></div>
+  </div></div>
+
+  <div class="mod" id="m04"><button class="mb2" onclick="tog('m04')" aria-expanded="false"><div class="mn">04</div><div class="mm"><span class="mc">Phase 2 · Architecture</span><span class="mt2">AI Tool Stack Planning</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd"><div class="fx fw g1 mb2"><span class="badge bg">Phase 2</span><span class="badge bd">Architecture</span></div>
+    <div class="log"><span class="lk">Content Research</span><span class="lv">Perplexity · Exa · NewsAPI · RSS feeds. Define source priority tiers 1–3.</span><span class="badge bd">Layer 1</span></div>
+    <div class="log"><span class="lk">Drafting Engine</span><span class="lv">LLM selection: voice match · context window · API cost · output speed · consistency</span><span class="badge bd">Layer 2</span></div>
+    <div class="log"><span class="lk">QA Pass</span><span class="lv">Secondary LLM: tone adherence · factuality · hallucination flag · readability</span><span class="badge bd">Layer 3</span></div>
+    <div class="log"><span class="lk">Formatting</span><span class="lv">Markdown → ESP HTML. Component library per client. Template versioned and locked.</span><span class="badge bd">Layer 4</span></div>
+    <div class="log"><span class="lk">Analytics Ingest</span><span class="lv">ESP data → Airtable → Looker Studio. Auto-refresh weekly. Anomaly alerts configured.</span><span class="badge bd">Layer 5</span></div>
+    <div class="co mt2"><p><strong>Rule:</strong> One tool per layer. Every layer must have a documented fallback. Client owns all accounts — never under agency credentials.</p></div>
+  </div></div>
+
+  <div class="mod" id="m05"><button class="mb2" onclick="tog('m05')" aria-expanded="false"><div class="mn">05</div><div class="mm"><span class="mc">Phase 3 · Automation</span><span class="mt2">Automation Workflow Mapping</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd"><div class="fx fw g1 mb2"><span class="badge bg">Phase 3</span><span class="badge bd">Automation</span></div>
+    <div class="flow"><div class="fn">I</div><div class="fd2"><div class="ft">Ingestion Trigger</div><div class="fs">Cron fires on schedule. RSS, search APIs, curated lists pulled into buffer store. Deduplication applied automatically.</div></div></div>
+    <div class="flow"><div class="fn">II</div><div class="fd2"><div class="ft">AI Curation Scoring</div><div class="fs">LLM scores items: relevance (0–10) · novelty (0–10) · audience fit (0–10). Below threshold auto-discarded. Top 10 surface for human review.</div></div></div>
+    <div class="flow"><div class="fn">III</div><div class="fd2"><div class="ft">Draft Generation Chain</div><div class="fs">System prompt chain: brand voice → section template → content prompt → output. Each section generated independently, then assembled. Human touch-up defined per section type.</div></div></div>
+    <div class="flow"><div class="fn">IV</div><div class="fd2"><div class="ft">QA Gates</div><div class="fs">Word count · link verification · image alt text · subject line A/B split · spam score &lt;2.0 · UTM injection. Flags route to human queue.</div></div></div>
+    <div class="flow"><div class="fn">V</div><div class="fd2"><div class="ft">Publish &amp; Track</div><div class="fs">Scheduled send via ESP. Analytics captured at 1h / 24h / 72h. Scorecard auto-generated to client dashboard.</div></div></div>
+    <div class="log mt2"><span class="lk">Human Gates</span><span class="lv">Minimum 2 human review points: post-draft and pre-send. Never fully unattended.</span><span class="badge ba">Required</span></div>
+    <div class="log"><span class="lk">Fallback</span><span class="lv">Every stage failure has defined path: hold · alert · fallback content. All documented.</span><span class="badge ba">Required</span></div>
+  </div></div>
+
+  <div class="mod" id="m06"><button class="mb2" onclick="tog('m06')" aria-expanded="false"><div class="mn">06</div><div class="mm"><span class="mc">Phase 4 · Revenue</span><span class="mt2">Monetization Architecture</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd"><div class="fx fw g1 mb2"><span class="badge bg">Phase 4</span><span class="badge bd">Revenue</span></div>
+    <div class="log"><span class="lk">Stream 1</span><span class="lv">Sponsorship — solo, classified, native. Launch at 1,000 engaged subscribers with media kit ready.</span><span class="badge bg">First</span></div>
+    <div class="log"><span class="lk">Stream 2</span><span class="lv">Paid Subscription — gated deep dives, tools, archives. Founding member pricing first 100.</span><span class="badge bg">Core</span></div>
+    <div class="log"><span class="lk">Stream 3</span><span class="lv">Affiliate — AI tool partnerships. CPA or revenue share. Max 1 per issue. Full FTC disclosure.</span><span class="badge bd">Passive</span></div>
+    <div class="log"><span class="lk">Stream 4</span><span class="lv">Digital Products — prompt packs, SOP templates. Pre-sell before building. One-time, evergreen.</span><span class="badge bd">Scalable</span></div>
+    <div class="log"><span class="lk">Stream 5</span><span class="lv">Community / Cohort — only after demand validation signal. High-value, high-effort.</span><span class="badge bd">Advanced</span></div>
+    <div class="log"><span class="lk">Stream 6</span><span class="lv">Consulting Pipeline — newsletter as top-of-funnel for client's own service. Track attribution.</span><span class="badge bd">Strategic</span></div>
+  </div></div>
+
+  <div class="mod" id="m07"><button class="mb2" onclick="tog('m07')" aria-expanded="false"><div class="mn">07</div><div class="mm"><span class="mc">Phase 4 · Analytics</span><span class="mt2">Analytics &amp; Optimization Framework</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd"><div class="fx fw g1 mb2"><span class="badge bg">Phase 4</span><span class="badge bd">Analytics</span></div>
+    <div class="log"><span class="lk">North Star</span><span class="lv">Paid subscriber count or total revenue. Set before launch. Never vanity metrics alone.</span><span class="badge bg">Priority 1</span></div>
+    <div class="log"><span class="lk">Health Metrics</span><span class="lv">Open rate · click rate · unsubscribe rate · spam complaint rate. Reviewed every issue.</span><span class="badge bg">Priority 2</span></div>
+    <div class="log"><span class="lk">Growth Metrics</span><span class="lv">New subscriber sources · list growth rate · churn rate · reactivation rate</span><span class="badge bg">Priority 3</span></div>
+    <div class="log"><span class="lk">Revenue Metrics</span><span class="lv">RPM · ARPU · LTV by acquisition source · sponsor fill rate · paid conversion rate</span><span class="badge bg">Priority 4</span></div>
+    <div class="flow mt2"><div class="fn">W</div><div class="fd2"><div class="ft">Weekly Review</div><div class="fs">Last issue metrics. Flag anomalies. Update A/B test log. Adjust next issue CTA.</div></div></div>
+    <div class="flow"><div class="fn">M</div><div class="fd2"><div class="ft">Monthly Analysis</div><div class="fs">Growth source attribution. Content performance by section. Revenue by stream. Churn cohort.</div></div></div>
+    <div class="flow"><div class="fn">Q</div><div class="fd2"><div class="ft">Quarterly Strategy</div><div class="fs">Full positioning review. Tool stack audit. Monetization performance. Next-quarter roadmap.</div></div></div>
+  </div></div>
+
+  <div class="mod" id="m08"><button class="mb2" onclick="tog('m08')" aria-expanded="false"><div class="mn">08</div><div class="mm"><span class="mc">Phase 3 · Legal</span><span class="mt2">Legal + Compliance Checklist</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd"><div class="fx fw g1 mb2"><span class="badge ba">Legal</span></div>
+    <div class="cow co mb2"><p><strong>Framework only.</strong> Review all items with client's legal counsel before launch. Not legal advice.</p></div>
+    <div class="log"><span class="lk">CAN-SPAM</span><span class="lv">Physical address in footer · clear unsubscribe · no deceptive subjects · sender ID</span><span class="badge ba">Required</span></div>
+    <div class="log"><span class="lk">GDPR (EU)</span><span class="lv">Express consent · data processing disclosure · right to erasure · DPA documentation</span><span class="badge ba">If EU</span></div>
+    <div class="log"><span class="lk">AI Disclosure</span><span class="lv">Define editorial disclosure policy for AI-assisted content. Add to brand style guide.</span><span class="badge ba">Best Practice</span></div>
+    <div class="log"><span class="lk">Affiliate / Sponsor</span><span class="lv">FTC-compliant disclosures above-the-fold. Never buried. Label "Sponsored" clearly.</span><span class="badge ba">Required</span></div>
+    <div class="log"><span class="lk">Privacy Policy</span><span class="lv">Published page: data collection, storage, third-party sharing, subscriber rights</span><span class="badge ba">Required</span></div>
+  </div></div>
+
+  <div class="mod" id="m09"><button class="mb2" onclick="tog('m09')" aria-expanded="false"><div class="mn">09</div><div class="mm"><span class="mc">Phase 4 · Scale</span><span class="mt2">Scaling Strategy</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd"><div class="fx fw g1 mb2"><span class="badge bg">Phase 4</span></div>
+    <div class="pillar"><div class="pi">🔗</div><div><div class="pt2">Referral Engine</div><div class="ps">SparkLoop or Beehiiv native. Tiers: 1 ref = bonus content · 5 = free month · 25 = founding member. Activate at 500 subscribers.</div></div></div>
+    <div class="pillar"><div class="pi">🤝</div><div><div class="pt2">Cross-Newsletter Partnerships</div><div class="ps">3–5 complementary newsletters. Ad swaps, co-promotions, shared subscriber segments. CPM-matched or reciprocal.</div></div></div>
+    <div class="pillar"><div class="pi">📣</div><div><div class="pt2">Paid Acquisition</div><div class="ps">Beehiiv Boosts / SparkLoop paid. Set max CPL. Only after organic validation and engagement benchmarks met.</div></div></div>
+    <div class="pillar"><div class="pi">🎙</div><div><div class="pt2">Content Distribution</div><div class="ps">One issue → LinkedIn post + X thread + YouTube Short. Automated via Make.com post-send trigger.</div></div></div>
+    <div class="pillar"><div class="pi">📦</div><div><div class="pt2">Multi-Newsletter Expansion</div><div class="ps">After 10K subscribers + stable MRR: launch niche spin-offs under same brand umbrella.</div></div></div>
+  </div></div>
+
+  <div class="mod" id="m10"><button class="mb2" onclick="tog('m10')" aria-expanded="false"><div class="mn">10</div><div class="mm"><span class="mc">Phase 4 · Delivery</span><span class="mt2">Client Handoff Framework</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd"><div class="fx fw g1 mb2"><span class="badge bg">Phase 4</span><span class="badge bd">Handoff</span></div>
+    <div class="hoff"><div><div class="ht">SOP Library</div><div class="hs">Full documentation for every production step — pipeline, tools, automation, troubleshooting</div></div><span class="badge bg">Deliver</span></div>
+    <div class="hoff"><div><div class="ht">Account Ownership Transfer</div><div class="hs">ESP, AI tools, analytics, domain — all under client billing. Transfer checklist signed off.</div></div><span class="badge bg">Deliver</span></div>
+    <div class="hoff"><div><div class="ht">Brand &amp; Voice Guide</div><div class="hs">Tone, vocabulary, templates, design system — all in one document</div></div><span class="badge bg">Deliver</span></div>
+    <div class="hoff"><div><div class="ht">Automation Diagram</div><div class="hs">Visual map: all triggers, conditions, outputs, fallbacks</div></div><span class="badge bg">Deliver</span></div>
+    <div class="hoff"><div><div class="ht">90-Day Roadmap</div><div class="hs">Growth experiments, monetization activation sequence, quarterly review schedule</div></div><span class="badge bg">Deliver</span></div>
+    <div class="hoff"><div><div class="ht">Recorded Walkthroughs</div><div class="hs">2–3 Loom recordings: daily ops · automation · analytics review</div></div><span class="badge bg">Deliver</span></div>
+    <div class="hoff"><div><div class="ht">Support Window Contract</div><div class="hs">30-day post-handoff terms: scope, channels, SLA, closing date. No open-ended support.</div></div><span class="badge bd">Contract</span></div>
+  </div></div>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: AI PROMPT LIBRARY (NEW v3)
+══════════════════════════════════════════════════════════ -->
+<main class="page" id="page-prompts">
+  <div class="shd mt2"><div class="sic">🤖</div><div><div class="slb">New in v3 · AI Prompting</div><h2 class="ts">AI Prompt Library</h2></div></div>
+  <p class="tm mb3">12 production-grade prompt architectures for every stage of the newsletter pipeline. Copy the structure, fill the variables marked in <span style="color:var(--am)">[brackets]</span>, lock in your brand vocabulary before deploying.</p>
+
+  <div class="mod" id="p01"><button class="mb2" onclick="tog('p01')" aria-expanded="false"><div class="mn">P1</div><div class="mm"><span class="mc">System Prompt · Drafting Engine</span><span class="mt2">Master Brand Voice System Prompt</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <p class="tm mb2">This is the root system prompt for every drafting task. Load it first in every API call. Never skip it.</p>
+    <div class="prompt-block">
+      <div class="prompt-label">SYSTEM PROMPT · BRAND VOICE</div>
+      <div class="prompt-text"><span class="prompt-comment"># Identity</span>
+You are the editorial AI for <span class="prompt-var">[Newsletter Name]</span>, a <span class="prompt-var">[cadence]</span> newsletter for <span class="prompt-var">[ICP description]</span>.
+
+<span class="prompt-comment"># Voice Profile</span>
+Tone: <span class="prompt-var">[3 adjectives: e.g. "precise, direct, practitioner-focused"]</span>
+Never: <span class="prompt-var">[3 things to avoid: e.g. "hype, vague claims, passive voice"]</span>
+Always: <span class="prompt-var">[3 rules: e.g. "lead with the insight, cite sources, end with action"]</span>
+
+<span class="prompt-comment"># Vocabulary Lock</span>
+Use these words: <span class="prompt-var">[10 brand vocabulary words]</span>
+Never use: <span class="prompt-var">[10 banned words]</span>
+
+<span class="prompt-comment"># Audience Context</span>
+Reader is: <span class="prompt-var">[ICP role]</span> who already knows <span class="prompt-var">[baseline knowledge level]</span>.
+Do not explain basics. Assume practitioner context at all times.
+
+<span class="prompt-comment"># Output Rules</span>
+- No em dashes in final copy
+- Paragraphs max 3 sentences
+- No filler phrases ("In today's fast-paced world", "It's worth noting")
+- End every section with one concrete next action</div>
+    </div>
+    <div class="co mt2"><p><strong>Deployment:</strong> Load this as the system prompt in every API call. Keep it under 600 tokens. Update vocabulary lock quarterly based on analytics data.</p></div>
+  </div></div>
+
+  <div class="mod" id="p02"><button class="mb2" onclick="tog('p02')" aria-expanded="false"><div class="mn">P2</div><div class="mm"><span class="mc">User Prompt · Curation</span><span class="mt2">Content Curation Scoring Prompt</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <p class="tm mb2">Run this on each ingested item to score and filter before human review. Use temperature 0.2 for consistent scoring.</p>
+    <div class="prompt-block">
+      <div class="prompt-label">USER PROMPT · CURATION SCORING</div>
+      <div class="prompt-text">Score this content item for <span class="prompt-var">[Newsletter Name]</span> audience: <span class="prompt-var">[ICP]</span>
+
+ITEM:
+Title: <span class="prompt-var">{{item_title}}</span>
+Source: <span class="prompt-var">{{item_source}}</span>
+Summary: <span class="prompt-var">{{item_summary}}</span>
+
+Score each dimension 0–10:
+- RELEVANCE: Directly relates to AI automation for <span class="prompt-var">[ICP]</span>?
+- NOVELTY: Not covered in last 30 days of our issues?
+- ACTIONABILITY: Can reader do something with this today?
+- CREDIBILITY: Comes from a primary source or verified practitioner?
+
+Respond ONLY with JSON:
+{"relevance":X,"novelty":X,"actionability":X,"credibility":X,"total":X,"keep":true/false,"one_line_context":"..."}
+
+Threshold: keep=true only if total ≥ 28/40</div>
+    </div>
+  </div></div>
+
+  <div class="mod" id="p03"><button class="mb2" onclick="tog('p03')" aria-expanded="false"><div class="mn">P3</div><div class="mm"><span class="mc">User Prompt · Lead Story</span><span class="mt2">Lead Story Draft Prompt</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="prompt-block">
+      <div class="prompt-label">USER PROMPT · LEAD STORY</div>
+      <div class="prompt-text">Write the lead story section for this week's issue of <span class="prompt-var">[Newsletter Name]</span>.
+
+TOPIC: <span class="prompt-var">{{topic}}</span>
+KEY SOURCES: <span class="prompt-var">{{source_1}}, {{source_2}}</span>
+MAIN INSIGHT: <span class="prompt-var">{{human_provided_insight}}</span>
+
+FORMAT EXACTLY:
+HEADLINE: [one sentence, under 12 words, no colon]
+BODY: [3–4 paragraphs, 60–80 words each]
+TAKEAWAY: [one sentence starting with "The implication:"]
+NEXT ACTION: [one specific thing the reader should do this week]
+
+Restrictions:
+- Do not start with "In", "The", or a person's name
+- No bullet points in body
+- Cite source inline as (Source Name)
+- Stay within <span class="prompt-var">[brand voice adjectives]</span> tone profile</div>
+    </div>
+  </div></div>
+
+  <div class="mod" id="p04"><button class="mb2" onclick="tog('p04')" aria-expanded="false"><div class="mn">P4</div><div class="mm"><span class="mc">User Prompt · Signal Section</span><span class="mt2">Signal Section Formatter Prompt</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="prompt-block">
+      <div class="prompt-label">USER PROMPT · SIGNAL SECTION</div>
+      <div class="prompt-text">Format these 5 curated items into the Signal section for <span class="prompt-var">[Newsletter Name]</span>.
+
+ITEMS: <span class="prompt-var">{{item_1}} | {{item_2}} | {{item_3}} | {{item_4}} | {{item_5}}</span>
+
+For EACH item output:
+📡 [SIGNAL LABEL IN CAPS — max 4 words]
+[One sentence: what happened + why it matters to <span class="prompt-var">[ICP]</span>]
+→ [Source Name] · [relevance tag: TOOL / RESEARCH / INDUSTRY / REGULATION]
+
+Rules:
+- No repetitive sentence openers
+- Lead with consequence, not description
+- Flag with ⚡ if action needed within 7 days
+- Keep each item under 35 words total</div>
+    </div>
+  </div></div>
+
+  <div class="mod" id="p05"><button class="mb2" onclick="tog('p05')" aria-expanded="false"><div class="mn">P5</div><div class="mm"><span class="mc">User Prompt · Tool Spotlight</span><span class="mt2">Tool Spotlight Review Prompt</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="prompt-block">
+      <div class="prompt-label">USER PROMPT · TOOL SPOTLIGHT</div>
+      <div class="prompt-text">Write a Tool Spotlight for <span class="prompt-var">[Newsletter Name]</span>.
+
+TOOL: <span class="prompt-var">{{tool_name}}</span>
+CATEGORY: <span class="prompt-var">{{category}}</span>
+HUMAN VERDICT: <span class="prompt-var">{{editor_notes}}</span>
+
+FORMAT EXACTLY:
+🛠 TOOL: [Name] — [one-word category]
+WHAT: [One sentence — what it does, no jargon]
+USE CASE: [Specific workflow for <span class="prompt-var">[ICP]</span> — one sentence]
+VERDICT: [Honest 2-sentence assessment]
+BEST FOR: [Role/use case match]
+SKIP IF: [Who this tool is wrong for]
+COST: [Pricing tier]
+LINK: [Placeholder]
+
+Tone: practitioner-to-practitioner. No marketing language. If the tool has a notable flaw, name it.</div>
+    </div>
+  </div></div>
+
+  <div class="mod" id="p06"><button class="mb2" onclick="tog('p06')" aria-expanded="false"><div class="mn">P6</div><div class="mm"><span class="mc">User Prompt · Workflow</span><span class="mt2">Automation Workflow Breakdown Prompt</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="prompt-block">
+      <div class="prompt-label">USER PROMPT · WORKFLOW BREAKDOWN</div>
+      <div class="prompt-text">Write an Automation Workflow breakdown for <span class="prompt-var">[Newsletter Name]</span>.
+
+WORKFLOW TOPIC: <span class="prompt-var">{{workflow_topic}}</span>
+TOOLS USED: <span class="prompt-var">{{tools}}</span>
+TIME SAVED: <span class="prompt-var">{{time_saved}}</span>
+
+FORMAT EXACTLY:
+⚙️ WORKFLOW: [Name in title case]
+TRIGGER: [What starts this automation]
+STEPS:
+  1. [Action — tool — output]
+  2. [Action — tool — output]
+  3. [Action — tool — output]
+TIME SAVED: [X hours/week]
+SKILL LEVEL: [Beginner / Intermediate / Advanced]
+PROMPT/CONFIG:
+[Include the actual prompt or config snippet here — not a placeholder]
+
+Rules:
+- Steps must be specific enough to implement
+- Include real tool names, not generic descriptions
+- If a step requires human input, mark it [HUMAN]</div>
+    </div>
+  </div></div>
+
+  <div class="mod" id="p07"><button class="mb2" onclick="tog('p07')" aria-expanded="false"><div class="mn">P7</div><div class="mm"><span class="mc">User Prompt · QA Pass</span><span class="mt2">Editorial QA &amp; Tone Check Prompt</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="prompt-block">
+      <div class="prompt-label">USER PROMPT · QA PASS</div>
+      <div class="prompt-text">Perform editorial QA on this newsletter draft for <span class="prompt-var">[Newsletter Name]</span>.
+
+DRAFT: <span class="prompt-var">{{full_draft}}</span>
+
+Check and report on:
+1. VOICE MATCH: Does it match <span class="prompt-var">[brand adjectives]</span>? Flag any off-brand sentences.
+2. BANNED WORDS: Flag any of these: <span class="prompt-var">[10 banned words]</span>
+3. FACTUAL CLAIMS: List any claim that requires verification with [VERIFY] tag
+4. READING LEVEL: Is it appropriate for <span class="prompt-var">[ICP sophistication level]</span>?
+5. CTA CLARITY: Is the single CTA clear and placed at end only?
+6. WORD COUNT: Current count vs. target <span class="prompt-var">[target_words]</span>
+7. PARAGRAPH LENGTH: Flag any paragraph over 4 sentences
+
+Output: structured report with PASS / FAIL / FLAG per dimension.
+Then output: corrected draft with tracked changes in [CHANGED: original → new] format.</div>
+    </div>
+  </div></div>
+
+  <div class="mod" id="p08"><button class="mb2" onclick="tog('p08')" aria-expanded="false"><div class="mn">P8</div><div class="mm"><span class="mc">User Prompt · Subject Lines</span><span class="mt2">Subject Line Generator Prompt</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="prompt-block">
+      <div class="prompt-label">USER PROMPT · SUBJECT LINES</div>
+      <div class="prompt-text">Generate 10 subject line options for this newsletter issue.
+
+ISSUE TOPIC: <span class="prompt-var">{{topic}}</span>
+NEWSLETTER NAME: <span class="prompt-var">[Newsletter Name]</span>
+AUDIENCE: <span class="prompt-var">[ICP]</span>
+PREVIOUS WINNER FORMULA: <span class="prompt-var">{{last_ab_winner}}</span>
+
+Generate 2 options per formula type:
+- CURIOSITY GAP (e.g. "Why X is wrong about Y")
+- NEWS HOOK (e.g. "[Tool/event] just changed [workflow]")
+- UTILITY (e.g. "The X-step system for Y")
+- CONTRARIAN (e.g. "Stop doing X. Do this instead.")
+- PERSONAL POV (e.g. "I was wrong about X")
+
+Rules per subject line:
+- Under 52 characters
+- No ALL CAPS words
+- No exclamation marks
+- No "free", "guarantee", "limited time"
+- Include preview text (40–80 chars) for each
+
+Output as table: Formula | Subject Line | Preview Text | Char Count</div>
+    </div>
+  </div></div>
+
+  <div class="mod" id="p09"><button class="mb2" onclick="tog('p09')" aria-expanded="false"><div class="mn">P9</div><div class="mm"><span class="mc">User Prompt · Welcome Sequence</span><span class="mt2">Welcome Email Writer Prompt</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="prompt-block">
+      <div class="prompt-label">USER PROMPT · WELCOME EMAIL</div>
+      <div class="prompt-text">Write welcome email <span class="prompt-var">{{email_number}}</span> of 4 for <span class="prompt-var">[Newsletter Name]</span>.
+
+EMAIL NUMBER: <span class="prompt-var">{{1/2/3/4}}</span>
+SEND TIMING: <span class="prompt-var">{{0min / 1day / 3days / 7days}}</span>
+PRIMARY GOAL: <span class="prompt-var">{{deliver_magnet / share_best_content / introduce_paid / collect_reply}}</span>
+LEAD MAGNET LINK: <span class="prompt-var">{{link}}</span>
+
+Rules:
+- Email 1: deliver magnet + set expectations. Under 150 words. No selling.
+- Email 2: share single best archive piece. End with reply-prompt question.
+- Email 3: show full paid tier value. Introduce upgrade offer naturally.
+- Email 4: ask "what's your biggest AI automation challenge?" — reply only.
+
+Format: Subject line | Preview text | Body | CTA (if applicable)
+Tone: warm, direct, from a human editor. Use "I" not "we". Sign with editor name.</div>
+    </div>
+  </div></div>
+
+  <div class="mod" id="p10"><button class="mb2" onclick="tog('p10')" aria-expanded="false"><div class="mn">P10</div><div class="mm"><span class="mc">User Prompt · SEO</span><span class="mt2">SEO Archive Page Optimizer Prompt</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="prompt-block">
+      <div class="prompt-label">USER PROMPT · SEO OPTIMIZER</div>
+      <div class="prompt-text">Optimize this newsletter issue for SEO web archive publication.
+
+ISSUE DRAFT: <span class="prompt-var">{{full_issue_text}}</span>
+TARGET KEYWORD: <span class="prompt-var">{{primary_keyword}}</span>
+SECONDARY KEYWORDS: <span class="prompt-var">{{kw_2}}, {{kw_3}}</span>
+NICHE: <span class="prompt-var">[Newsletter niche]</span>
+
+Output in order:
+1. SEO TITLE TAG: [Under 60 chars, includes primary keyword]
+2. META DESCRIPTION: [Under 155 chars, includes keyword, has CTA verb]
+3. H1: [Issue headline, keyword-optimized]
+4. INTRO PARAGRAPH: [80–100 words, keyword in first sentence, states what reader will learn]
+5. INTERNAL LINK SUGGESTIONS: [3 anchor text + URL placeholder suggestions to other archive issues]
+6. SIGNUP CTA BLOCK: [2-sentence newsletter promotion with signup link placeholder]
+7. SCHEMA MARKUP: [Article schema JSON-LD snippet, prefilled with issue data]</div>
+    </div>
+  </div></div>
+
+  <div class="mod" id="p11"><button class="mb2" onclick="tog('p11')" aria-expanded="false"><div class="mn">P11</div><div class="mm"><span class="mc">User Prompt · Repurposing</span><span class="mt2">Social Repurposing Prompt</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="prompt-block">
+      <div class="prompt-label">USER PROMPT · SOCIAL REPURPOSING</div>
+      <div class="prompt-text">Repurpose this newsletter issue into social content.
+
+ISSUE TEXT: <span class="prompt-var">{{full_issue}}</span>
+NEWSLETTER NAME: <span class="prompt-var">[Newsletter Name]</span>
+SIGNUP LINK: <span class="prompt-var">{{signup_url}}</span>
+
+Generate ALL of the following:
+
+LINKEDIN POST:
+- Hook line (max 12 words, no question mark)
+- Body (150–250 words, no bullet points, conversational)
+- CTA in comment (not caption): "Link to subscribe in comment ↓"
+
+X THREAD (8 tweets):
+- Tweet 1: Hook — most surprising insight from issue
+- Tweets 2–6: One signal item each, under 240 chars
+- Tweet 7: Key workflow or tool in 2 sentences
+- Tweet 8: "Full breakdown in this week's [Newsletter Name] →" + signup link
+
+YOUTUBE SHORT SCRIPT (60 seconds):
+- Hook (0–5s): Surprising claim
+- Value (5–50s): 3-step breakdown of main insight
+- CTA (50–60s): "Subscribe link in description"</div>
+    </div>
+  </div></div>
+
+  <div class="mod" id="p12"><button class="mb2" onclick="tog('p12')" aria-expanded="false"><div class="mn">P12</div><div class="mm"><span class="mc">User Prompt · Sponsor</span><span class="mt2">Sponsor Native Ad Writer Prompt</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="prompt-block">
+      <div class="prompt-label">USER PROMPT · SPONSOR AD COPY</div>
+      <div class="prompt-text">Write a native sponsor ad for <span class="prompt-var">[Newsletter Name]</span>.
+
+SPONSOR: <span class="prompt-var">{{sponsor_name}}</span>
+PRODUCT/SERVICE: <span class="prompt-var">{{product_description}}</span>
+OFFER: <span class="prompt-var">{{offer_or_cta}}</span>
+LINK: <span class="prompt-var">{{tracking_link}}</span>
+THIS ISSUE TOPIC: <span class="prompt-var">{{issue_topic}}</span>
+
+Rules:
+- Open with "Sponsor:" disclosure label
+- Connect sponsor to this issue's topic in first sentence
+- Write as if recommending to a colleague — not selling
+- Under 80 words total
+- One link only, anchor text is the offer/CTA
+- No exclamation marks
+- Must feel written by the editor, not a copywriter
+
+Do NOT use: "game-changing", "revolutionary", "cutting-edge", "powerful"
+Tone must match: <span class="prompt-var">[brand voice adjectives]</span></div>
+    </div>
+  </div></div>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: EMAIL HTML TEMPLATE (NEW v3)
+══════════════════════════════════════════════════════════ -->
+<main class="page" id="page-template">
+  <div class="shd mt2"><div class="sic">📧</div><div><div class="slb">New in v3 · Infrastructure</div><h2 class="ts">Email HTML Template</h2></div></div>
+  <p class="tm mb3">The production email template framework — visual structure, HTML architecture rules, mobile-first requirements, and the live preview of how a properly built newsletter issue should look inside an inbox.</p>
+
+  <!-- Live Preview -->
+  <div class="card mb3">
+    <div class="tx mb2">Live Template Preview — Desktop Rendering</div>
+    <div class="ep">
+      <div class="ep-bar">
+        <div class="ep-dot" style="background:#ff5f57"></div>
+        <div class="ep-dot" style="background:#febc2e"></div>
+        <div class="ep-dot" style="background:#28c840"></div>
+        <span style="font-size:10px;color:#9ca3af;margin-left:8px;font-family:sans-serif">Inbox Preview</span>
+      </div>
+      <div class="ep-body">
+        <div class="ep-header">
+          <div class="ep-logo">AI AUTOMATION WEEKLY</div>
+          <div class="ep-title">Issue #42 — Week of Jan 27</div>
+          <div class="ep-issue">3 min read · 5 signals · 1 workflow</div>
+        </div>
+        <div class="ep-section-label">LEAD STORY</div>
+        <div class="ep-h1">Your headline goes here — specific, outcome-driven, under 12 words</div>
+        <div class="ep-p">Opening paragraph: lead with the insight, not the context. The first sentence must earn the read. Practitioners have zero patience for warm-up prose. State what changed and why it matters.</div>
+        <div class="ep-p">Body paragraph: expand with evidence, example, or implication. Reference a primary source inline. Keep paragraphs to 3 sentences maximum.</div>
+        <div class="ep-divider"></div>
+        <div class="ep-section-label">THIS WEEK'S SIGNALS</div>
+        <div class="ep-signal"><div class="ep-signal-title">📡 SIGNAL LABEL · Source Name</div><div class="ep-signal-desc">One sentence: what happened and why it matters to your reader today. Lead with consequence. ⚡ Action needed this week.</div></div>
+        <div class="ep-signal"><div class="ep-signal-title">📡 SECOND SIGNAL · Source Name</div><div class="ep-signal-desc">One sentence: what happened and the specific implication for AI automation practitioners.</div></div>
+        <div class="ep-divider"></div>
+        <div class="ep-section-label">TOOL SPOTLIGHT</div>
+        <div class="ep-p" style="font-size:12px"><strong style="color:#111827">🛠 TOOL NAME — Category</strong><br>WHAT: One sentence description.<br>USE CASE: Specific workflow for your ICP.<br>VERDICT: Honest 2-sentence assessment. Name the flaw.<br>BEST FOR: Role match · SKIP IF: Who this is wrong for</div>
+        <div class="ep-divider"></div>
+        <div style="text-align:center;padding:8px 0">
+          <div class="ep-cta">→ Read the full deep dive (Premium)</div>
+          <div style="font-size:10px;color:#9ca3af;margin-top:8px;font-family:sans-serif">Upgrade to read the full workflow breakdown + 3 more signals</div>
+        </div>
+        <div class="ep-footer">
+          You're receiving this because you subscribed at [newsletter-name].com<br>
+          [Unsubscribe] · [Manage Preferences] · [View in Browser]<br>
+          Newsletter Name · 123 Street, City, ST 12345
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HTML Architecture Rules -->
+  <div class="mod" id="t01"><button class="mb2" onclick="tog('t01')" aria-expanded="false"><div class="mn">T1</div><div class="mm"><span class="mc">Template · Architecture</span><span class="mt2">HTML Email Architecture Rules</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="cow co mb2"><p><strong>Critical:</strong> Email HTML is not web HTML. Tables are required for layout. CSS must be inline. Test in Litmus or Email on Acid before deploying to live list.</p></div>
+    <div class="log"><span class="lk">Layout Engine</span><span class="lv">Use table-based layout, not divs or flexbox. Max container width: 600px. Center-aligned.</span><span class="badge ba">Required</span></div>
+    <div class="log"><span class="lk">CSS Inline</span><span class="lv">All CSS must be inlined before send. Use Mailchimp CSS Inliner or Putsmail. No &lt;link&gt; tags.</span><span class="badge ba">Required</span></div>
+    <div class="log"><span class="lk">Fonts</span><span class="lv">Specify fallback stack: "[Brand Font]", Georgia, serif. Web fonts render in Apple Mail only.</span><span class="badge bd">Rule</span></div>
+    <div class="log"><span class="lk">Images</span><span class="lv">Alt text on every image. Max image width 600px. Host on CDN — never embed base64.</span><span class="badge ba">Required</span></div>
+    <div class="log"><span class="lk">Mobile Breakpoint</span><span class="lv">Media query at 480px: single column, 16px+ body text, 44px+ tap targets on all links.</span><span class="badge ba">Required</span></div>
+    <div class="log"><span class="lk">Dark Mode</span><span class="lv">Test prefers-color-scheme: dark. Add media query to invert logo colors for dark mode inboxes.</span><span class="badge bd">Best Practice</span></div>
+    <div class="log"><span class="lk">Plain Text Version</span><span class="lv">Every HTML send must have a plain text twin. ESP generates auto, but always review for readability.</span><span class="badge ba">Required</span></div>
+    <div class="log"><span class="lk">Unsubscribe Header</span><span class="lv">List-Unsubscribe and List-Unsubscribe-Post headers in every email. Must be implemented at ESP level.</span><span class="badge ba">Required</span></div>
+    <hr class="dv">
+    <div class="tx mb2">Template Section Order (locked)</div>
+    <div class="flow"><div class="fn">1</div><div class="fd2"><div class="ft">Preheader Text</div><div class="fs">Hidden text (font-size:0, max-height:0) — appears as preview text in inbox. 40–90 chars. Write it manually every issue — never leave as template default.</div></div></div>
+    <div class="flow"><div class="fn">2</div><div class="fd2"><div class="ft">Header Bar</div><div class="fs">Newsletter name · Issue number · Date · Read time. Dark background for visual separation from inbox list. Logo always links to website homepage.</div></div></div>
+    <div class="flow"><div class="fn">3</div><div class="fd2"><div class="ft">Lead Story Block</div><div class="fs">Section label in small caps → H1 headline → body paragraphs → takeaway line in bold. Consistent padding: 24px left/right, 16px top/bottom per section.</div></div></div>
+    <div class="flow"><div class="fn">4</div><div class="fd2"><div class="ft">Signal Section</div><div class="fs">Branded divider → section label → 3–5 signal items. Each item in its own mini-card with left border accent. Visual separation creates scannable rhythm.</div></div></div>
+    <div class="flow"><div class="fn">5</div><div class="fd2"><div class="ft">Tool Spotlight</div><div class="fs">Branded divider → section label → structured tool card. Fixed format every issue — readers learn where to look.</div></div></div>
+    <div class="flow"><div class="fn">6</div><div class="fd2"><div class="ft">Paywall CTA Block</div><div class="fs">For free tier: teaser of premium section + upgrade CTA button. Background color change signals the gate. This is the highest-converting placement.</div></div></div>
+    <div class="flow"><div class="fn">7</div><div class="fd2"><div class="ft">Footer</div><div class="fs">Unsubscribe link · preferences link · view in browser · physical mailing address · issue number. Keep footer text under 50 words. Legal items must be visible — not hidden.</div></div></div>
+  </div></div>
+
+  <!-- Testing Checklist -->
+  <div class="mod" id="t02"><button class="mb2" onclick="tog('t02')" aria-expanded="false"><div class="mn">T2</div><div class="mm"><span class="mc">Template · QA</span><span class="mt2">Pre-Send Template Testing Protocol</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="log"><span class="lk">Render Testing</span><span class="lv">Test in Litmus or Email on Acid across: Gmail (web + Android), Apple Mail, Outlook 2019+, iOS Mail</span><span class="badge ba">Every Issue</span></div>
+    <div class="log"><span class="lk">Spam Score</span><span class="lv">Run through Mail-Tester.com. Score must be &gt;8/10 (spam score &lt;2/10). Fix before send.</span><span class="badge ba">Every Issue</span></div>
+    <div class="log"><span class="lk">Link Check</span><span class="lv">Click every link in a test send. Verify UTM parameters are appended. No broken links.</span><span class="badge ba">Every Issue</span></div>
+    <div class="log"><span class="lk">Dark Mode</span><span class="lv">Preview in dark mode: Apple Mail, Gmail Android. Check logo visibility and text contrast.</span><span class="badge bd">Every Issue</span></div>
+    <div class="log"><span class="lk">Mobile Render</span><span class="lv">View on real iOS and Android device, not just emulator. Font sizes, CTA button tap area.</span><span class="badge ba">Every Issue</span></div>
+    <div class="log"><span class="lk">Unsubscribe Test</span><span class="lv">Click unsubscribe link — verify it works and removes subscriber within 10 days.</span><span class="badge ba">Monthly</span></div>
+  </div></div>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: SPONSOR SALES SYSTEM (NEW v3)
+══════════════════════════════════════════════════════════ -->
+<main class="page" id="page-sponsor">
+  <div class="shd mt2"><div class="sic">🤝</div><div><div class="slb">New in v3 · Revenue</div><h2 class="ts">Sponsor Sales System</h2></div></div>
+  <p class="tm mb3">Sponsorship is the fastest path to revenue for newsletters under 5,000 subscribers. This section covers media kit structure, outreach cadence, rate-setting, objection handling, and contract terms.</p>
+
+  <div class="mod" id="sp01"><button class="mb2" onclick="tog('sp01')" aria-expanded="false"><div class="mn">S1</div><div class="mm"><span class="mc">Sponsor · Media Kit</span><span class="mt2">Media Kit Structure Framework</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <p class="tm mb2">The media kit is your sales document. It should be a single PDF or webpage. Design it before reaching out to a single sponsor. Never pitch without it.</p>
+    <div class="flow"><div class="fn">1</div><div class="fd2"><div class="ft">Header: Newsletter Identity</div><div class="fs">Newsletter name · tagline · niche · publishing cadence · founding date. One sentence that tells a sponsor exactly who reads this and why they matter.</div></div></div>
+    <div class="flow"><div class="fn">2</div><div class="fd2"><div class="ft">Audience Demographics</div><div class="fs">Subscriber count · avg open rate · avg CTR · top subscriber roles (from onboarding survey data) · top companies represented · geographic distribution. Real numbers only — never estimate.</div></div></div>
+    <div class="flow"><div class="fn">3</div><div class="fd2"><div class="ft">Placement Options</div><div class="fs">List every ad slot with name, position in email, word count limit, and inclusion/exclusion rules. Include a visual diagram of where each placement appears in the template.</div></div></div>
+    <div class="flow"><div class="fn">4</div><div class="fd2"><div class="ft">Rate Card</div><div class="fs">Price per placement. CPM basis. Package options (4-issue monthly retainer at +15% premium). State clearly: rates are based on delivered subscribers, not total list.</div></div></div>
+    <div class="flow"><div class="fn">5</div><div class="fd2"><div class="ft">Past Sponsors (Social Proof)</div><div class="fs">Logo wall of past or current sponsors. If first sponsor — skip this section. Add after first 2 paid placements. Never fake it.</div></div></div>
+    <div class="flow"><div class="fn">6</div><div class="fd2"><div class="ft">Process &amp; Next Steps</div><div class="fs">How booking works: inquiry → creative brief → copy submission deadline → send date confirmation → post-send report. Timeline from booking to publish: 2 weeks minimum.</div></div></div>
+    <div class="flow"><div class="fn">7</div><div class="fd2"><div class="ft">Contact &amp; Booking CTA</div><div class="fs">One email address only. Link to Calendly for 15-min intro call (optional). No forms — email only to start. Direct is faster and more personal.</div></div></div>
+  </div></div>
+
+  <div class="mod" id="sp02"><button class="mb2" onclick="tog('sp02')" aria-expanded="false"><div class="mn">S2</div><div class="mm"><span class="mc">Sponsor · Outreach</span><span class="mt2">Cold Outreach System &amp; Scripts</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <p class="tm mb2">Send 20 cold sponsor pitches per week. Track in CRM (Airtable). Expect 3–5% reply rate. Qualify before pitching — irrelevant pitches damage reputation.</p>
+    <div class="cb mb2">
+      <span class="cm"># Sponsor Prospect Qualification Criteria</span><br>
+      <span class="ck">Industry Match:</span> <span class="cv">Do they sell to your ICP or in your niche?</span><br>
+      <span class="ck">Budget Signal:</span> <span class="cv">Do they already advertise in other newsletters?</span><br>
+      <span class="ck">Product Fit:</span> <span class="cv">Would YOUR subscribers genuinely find this useful?</span><br>
+      <span class="ck">Company Size:</span> <span class="cv">Target Series A+ startups or established SMBs — not bootstrapped solo projects</span>
+    </div>
+    <div class="prompt-block mb2">
+      <div class="prompt-label">COLD EMAIL TEMPLATE · INITIAL OUTREACH</div>
+      <div class="prompt-text">Subject: <span class="prompt-var">[Newsletter Name]</span> — sponsor opportunity for <span class="prompt-var">[their ICP]</span>
+
+Hi <span class="prompt-var">[First Name]</span>,
+
+I run <span class="prompt-var">[Newsletter Name]</span> — a <span class="prompt-var">[cadence]</span> newsletter read by <span class="prompt-var">[subscriber count]</span> <span class="prompt-var">[ICP description]</span> with a <span class="prompt-var">[open rate]</span>% open rate.
+
+Your <span class="prompt-var">[product/service]</span> is a natural fit for our audience because <span class="prompt-var">[one specific reason tied to their product]</span>.
+
+We have <span class="prompt-var">[X]</span> sponsorship slots available in <span class="prompt-var">[month]</span>. Primary placement is <span class="prompt-var">[$X]</span> per issue.
+
+Media kit: <span class="prompt-var">[link]</span>
+
+Worth a 10-minute call?
+
+<span class="prompt-var">[Your name]</span></div>
+    </div>
+    <div class="prompt-block">
+      <div class="prompt-label">FOLLOW-UP EMAIL · DAY 5 (IF NO REPLY)</div>
+      <div class="prompt-text">Subject: Re: <span class="prompt-var">[Newsletter Name]</span> sponsor opportunity
+
+Hi <span class="prompt-var">[First Name]</span>,
+
+Following up on the below. 
+
+This week's issue went to <span class="prompt-var">[X]</span> <span class="prompt-var">[ICP]</span> — <span class="prompt-var">[open rate]</span>% opened it.
+
+One slot left for <span class="prompt-var">[month]</span> if timing works.
+
+<span class="prompt-var">[Your name]</span></div>
+    </div>
+    <div class="co mt2"><p><strong>Rule:</strong> Maximum 2 follow-ups per prospect. After no reply to follow-up 2, mark "No Response" in CRM and move to next batch. Never send a 3rd cold email.</p></div>
+  </div></div>
+
+  <div class="mod" id="sp03"><button class="mb2" onclick="tog('sp03')" aria-expanded="false"><div class="mn">S3</div><div class="mm"><span class="mc">Sponsor · CRM &amp; Pipeline</span><span class="mt2">Sponsor CRM &amp; Pipeline Management</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <p class="tm mb2">Track every sponsor prospect in Airtable. This is not optional — without a CRM, you will lose deals in your inbox and miss follow-up windows.</p>
+    <div class="tx mb2">Sponsor Pipeline Stages</div>
+    <div class="crm-row"><div><div class="crm-name">Prospecting</div><div class="crm-detail">Identified but not yet contacted</div></div><span class="badge bd">Stage 1</span><span class="badge bd">Cold</span><span style="width:60px"></span></div>
+    <div class="crm-row"><div><div class="crm-name">Pitched</div><div class="crm-detail">Initial email sent — awaiting reply</div></div><span class="badge ba">Stage 2</span><span class="badge bd">5d follow-up</span><span style="width:60px"></span></div>
+    <div class="crm-row"><div><div class="crm-name">In Conversation</div><div class="crm-detail">Replied — discussing terms or dates</div></div><span class="badge bg">Stage 3</span><span class="badge bd">Active</span><span style="width:60px"></span></div>
+    <div class="crm-row"><div><div class="crm-name">Booked</div><div class="crm-detail">Invoice sent — slot confirmed on calendar</div></div><span class="badge bg">Stage 4</span><span class="badge bd">Confirmed</span><span style="width:60px"></span></div>
+    <div class="crm-row"><div><div class="crm-name">Delivered</div><div class="crm-detail">Published — post-send report sent</div></div><span class="badge bg">Stage 5</span><span class="badge bd">Done</span><span style="width:60px"></span></div>
+    <div class="crm-row"><div><div class="crm-name">No Response</div><div class="crm-detail">2 emails sent, no reply — archive after 90d</div></div><span class="badge bd">Archive</span><span class="badge bd">Pause 90d</span><span style="width:60px"></span></div>
+    <hr class="dv">
+    <div class="log"><span class="lk">Required Fields</span><span class="lv">Company · Contact Name · Email · Product · Stage · Last Contacted · Follow-up Date · Rate Offered · Issue Slot · Notes</span><span class="badge bd">Track</span></div>
+    <div class="log"><span class="lk">Weekly Review</span><span class="lv">Every Monday: move stages, send follow-ups, identify new prospects to add. 30 minutes max.</span><span class="badge bd">Ritual</span></div>
+    <div class="log"><span class="lk">Post-Send Report</span><span class="lv">Send within 48 hours: open rate, clicks on sponsor link, estimated impressions. Builds repeat bookings.</span><span class="badge bg">Required</span></div>
+  </div></div>
+
+  <div class="mod" id="sp04"><button class="mb2" onclick="tog('sp04')" aria-expanded="false"><div class="mn">S4</div><div class="mm"><span class="mc">Sponsor · Objections &amp; Contract</span><span class="mt2">Objection Handling &amp; Contract Essentials</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="log"><span class="lk">"List too small"</span><span class="lv">"Our audience is smaller but hyper-targeted. A 40% open rate on 2,000 engaged [ICP] outperforms a 15% rate on 20,000 generalists."</span><span class="badge bd">Response</span></div>
+    <div class="log"><span class="lk">"Rate too high"</span><span class="lv">Offer a first-issue trial rate (10% discount, one time only). Or offer a classified spot instead of primary. Never drop rate below CPM floor.</span><span class="badge bd">Response</span></div>
+    <div class="log"><span class="lk">"Need to see results"</span><span class="lv">Propose a single paid test issue with a trackable URL. No guarantees — set clear expectations in writing before sending.</span><span class="badge bd">Response</span></div>
+    <div class="log"><span class="lk">"Send our copy"</span><span class="lv">Require sponsor copy 7 days before send. Editorial right to revise for tone match — this is non-negotiable. Stated in contract.</span><span class="badge ba">Policy</span></div>
+    <hr class="dv">
+    <div class="tx mb2">Minimum Contract Terms (get in writing before any paid placement)</div>
+    <div class="log"><span class="lk">Scope</span><span class="lv">Issue date · placement slot · word count · link limit (max 2) · creative deadline</span><span class="badge ba">Required</span></div>
+    <div class="log"><span class="lk">Editorial Rights</span><span class="lv">Publisher retains right to edit sponsor copy for tone, accuracy, and brand fit</span><span class="badge ba">Required</span></div>
+    <div class="log"><span class="lk">Payment Terms</span><span class="lv">100% payment before send. Net-0 terms only. No "pay after results." No invoicing after delivery.</span><span class="badge ba">Required</span></div>
+    <div class="log"><span class="lk">Cancellation</span><span class="lv">Full refund if cancelled 14+ days before send. 50% if cancelled 7–13 days. No refund under 7 days.</span><span class="badge ba">Required</span></div>
+    <div class="log"><span class="lk">Exclusivity</span><span class="lv">Primary sponsor gets category exclusivity per issue (no direct competitors in same issue). Classified slots are non-exclusive.</span><span class="badge bd">Recommended</span></div>
+  </div></div>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: PAID TIER COPY (NEW v3)
+══════════════════════════════════════════════════════════ -->
+<main class="page" id="page-paid">
+  <div class="shd mt2"><div class="sic">💎</div><div><div class="slb">New in v3 · Conversion</div><h2 class="ts">Paid Tier Conversion Copy</h2></div></div>
+  <p class="tm mb3">The paid tier upgrade system converts free subscribers into paying members. Every touchpoint — the paywall gate, the upgrade page, the founding member pitch, and the ongoing upsell — needs purpose-built copy.</p>
+
+  <div class="mod" id="pd01"><button class="mb2" onclick="tog('pd01')" aria-expanded="false"><div class="mn">PD1</div><div class="mm"><span class="mc">Paid Copy · Paywall Gate</span><span class="mt2">In-Email Paywall Gate Copy</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <p class="tm mb2">The paywall gate appears inside the free issue — after the teaser of a premium section. This is the highest-converting touchpoint in the entire paid funnel.</p>
+    <div class="prompt-block mb2">
+      <div class="prompt-label">PAYWALL GATE COPY · TEMPLATE</div>
+      <div class="prompt-text"><span class="prompt-comment">— This section continues for Premium members —</span>
+
+In the full breakdown, <span class="prompt-var">[specific outcome or revelation]</span>.
+
+Premium members also get:
+→ The complete <span class="prompt-var">[section name]</span> every issue
+→ <span class="prompt-var">[specific benefit: e.g. "the full workflow with prompt included"]</span>
+→ Full archive access — <span class="prompt-var">[X]</span> issues of deep dives
+
+<span class="prompt-var">[X]</span> practitioners upgraded this month.
+
+[Upgrade for $<span class="prompt-var">X</span>/month →]
+
+<span class="prompt-comment">— or continue reading the free edition below —</span></div>
+    </div>
+    <div class="log"><span class="lk">Placement</span><span class="lv">After section 3 (Tool Spotlight). Never after section 1 — reader must receive value before hitting a gate.</span><span class="badge bd">Rule</span></div>
+    <div class="log"><span class="lk">Length</span><span class="lv">Under 60 words. The gate should feel like a natural pause, not an interruption.</span><span class="badge bd">Rule</span></div>
+    <div class="log"><span class="lk">Specificity</span><span class="lv">Name the exact premium content they're missing. "The full breakdown" is weak. "The 7-step automation diagram with n8n config" is strong.</span><span class="badge ba">Critical</span></div>
+    <div class="log"><span class="lk">Social Proof</span><span class="lv">Include "X members upgraded this month" — update monthly. Creates live FOMO without fabrication.</span><span class="badge bd">Include</span></div>
+  </div></div>
+
+  <div class="mod" id="pd02"><button class="mb2" onclick="tog('pd02')" aria-expanded="false"><div class="mn">PD2</div><div class="mm"><span class="mc">Paid Copy · Upgrade Page</span><span class="mt2">Upgrade Landing Page Framework</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="flow"><div class="fn">1</div><div class="fd2"><div class="ft">Headline: Outcome, Not Feature</div><div class="fs">Wrong: "Upgrade to Premium" — Right: "Get the full breakdown every [cadence] — plus the workflows, prompts, and tool configs that [ICP] actually use." The headline must state what they get, not what they pay for.</div></div></div>
+    <div class="flow"><div class="fn">2</div><div class="fd2"><div class="ft">What's Inside — Specific List</div><div class="fs">List every premium section by its exact name. Show a blurred or redacted preview of a real premium deep dive. Specificity converts. "Exclusive content" does not.</div></div></div>
+    <div class="flow"><div class="fn">3</div><div class="fd2"><div class="ft">Social Proof Block</div><div class="fs">2–3 testimonials from real subscribers. Must include: role, company type (not name), and a specific outcome they got. No vague praise ("great newsletter!"). Quote the result.</div></div></div>
+    <div class="flow"><div class="fn">4</div><div class="fd2"><div class="ft">Pricing &amp; Toggle</div><div class="fs">Monthly vs annual pricing toggle. Annual at 2-month discount (equivalent). Show monthly price prominently, annual savings in smaller text. Founding member pricing if applicable — show original vs. locked price.</div></div></div>
+    <div class="flow"><div class="fn">5</div><div class="fd2"><div class="ft">Risk Reversal</div><div class="fs">30-day money-back guarantee. State it simply: "If it's not worth it, email us within 30 days for a full refund." This removes friction without cheapening the product.</div></div></div>
+    <div class="flow"><div class="fn">6</div><div class="fd2"><div class="ft">Single CTA Button</div><div class="fs">One button. Color: high contrast (your brand green). Text: "Upgrade Now" or "Join [X] Premium Members" — not "Subscribe" (implies obligation, not choice).</div></div></div>
+    <div class="flow"><div class="fn">7</div><div class="fd2"><div class="ft">FAQ (5 Questions Only)</div><div class="fs">Answer only the 5 objections that actually stop sign-ups. Validate by asking 10 free subscribers what stops them from upgrading. Build FAQ from real answers, not guesses.</div></div></div>
+  </div></div>
+
+  <div class="mod" id="pd03"><button class="mb2" onclick="tog('pd03')" aria-expanded="false"><div class="mn">PD3</div><div class="mm"><span class="mc">Paid Copy · Founding Member</span><span class="mt2">Founding Member Launch Sequence</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <p class="tm mb2">The founding member offer is the single highest-converting launch moment. Done correctly, it fills the first 50–100 paid seats in the first 72 hours. Done wrong, it trains the audience to wait for discounts.</p>
+    <div class="flow"><div class="fn">E1</div><div class="fd2"><div class="ft">Pre-Launch Teaser (7 days before)</div><div class="fs">Issue CTA: "Next week I'm opening paid membership for the first time. First [X] members get the founding rate — locked forever. Not announcing price until launch." Creates anticipation without over-explaining.</div></div></div>
+    <div class="flow"><div class="fn">E2</div><div class="fd2"><div class="ft">Launch Day Dedicated Email</div><div class="fs">Subject: "Founding membership is open (48 hours only)". Body: what's included · founding rate · why this rate never comes back · what founding members get that regular members won't · single CTA. Under 300 words. No fluff.</div></div></div>
+    <div class="flow"><div class="fn">E3</div><div class="fd2"><div class="ft">48-Hour Reminder</div><div class="fs">"[X] founding spots claimed. [Y] remain. Closes tomorrow." Update the number each time. Real scarcity always outperforms manufactured scarcity.</div></div></div>
+    <div class="flow"><div class="fn">E4</div><div class="fd2"><div class="ft">Final Hours Close</div><div class="fs">"Founding rate closes in 3 hours. After that, the price increases to [$X]. That's it." No extensions. No exceptions. Close it when you said you would. Credibility is the only real asset.</div></div></div>
+    <div class="log mt2"><span class="lk">Founding Rate</span><span class="lv">25–35% below regular rate, locked for life. Cap at 100 founding members maximum.</span><span class="badge bg">Set</span></div>
+    <div class="log"><span class="lk">Close the Offer</span><span class="lv">When founding tier closes, it never reopens. No "we got so many requests" second window. Ever.</span><span class="badge ba">Non-Negotiable</span></div>
+  </div></div>
+
+  <div class="mod" id="pd04"><button class="mb2" onclick="tog('pd04')" aria-expanded="false"><div class="mn">PD4</div><div class="mm"><span class="mc">Paid Copy · Ongoing Upsell</span><span class="mt2">Ongoing Upgrade Trigger System</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="log"><span class="lk">Issue #3 Trigger</span><span class="lv">After a subscriber reads 3 issues without upgrading, trigger an automated upgrade email: "You've read 3 issues — here's what premium members saw that you didn't."</span><span class="badge bd">Automate</span></div>
+    <div class="log"><span class="lk">High-Open Trigger</span><span class="lv">If subscriber opened last 4 issues: send personalized upgrade prompt referencing a specific section they missed.</span><span class="badge bd">Automate</span></div>
+    <div class="log"><span class="lk">Paywall Click Trigger</span><span class="lv">If subscriber clicks the paywall CTA but doesn't convert: send a 24-hour follow-up with a FAQ answer + testimonial.</span><span class="badge bd">Automate</span></div>
+    <div class="log"><span class="lk">Annual Upgrade Prompt</span><span class="lv">Monthly members after 3 months: offer annual upgrade with savings calculation. "You've spent $[X×3]. Annual is $[X]. That's $[savings] back."</span><span class="badge bd">Automate</span></div>
+    <div class="log"><span class="lk">Win-Back</span><span class="lv">Churned paid members after 30 days: send "What happened?" email with re-engagement offer. No discounts in first win-back — qualify reason first.</span><span class="badge bd">Automate</span></div>
+  </div></div>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: SEO ARCHIVE STRATEGY (NEW v3)
+══════════════════════════════════════════════════════════ -->
+<main class="page" id="page-seo">
+  <div class="shd mt2"><div class="sic">🔎</div><div><div class="slb">New in v3 · Growth</div><h2 class="ts">SEO Archive Strategy</h2></div></div>
+  <p class="tm mb3">A public newsletter archive is a compounding SEO asset. Each issue is a piece of keyword-targeted long-form content that drives organic subscriber acquisition — for free — indefinitely. This is how newsletters break the cycle of only growing through social.</p>
+
+  <div class="mod" id="seo01"><button class="mb2" onclick="tog('seo01')" aria-expanded="false"><div class="mn">SE1</div><div class="mm"><span class="mc">SEO · Keyword Strategy</span><span class="mt2">Newsletter Keyword Architecture</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <p class="tm mb2">Target keywords with high subscriber intent — not just high volume. A reader who finds the archive through Google is already interested in the exact topic — they convert to subscribers at 8–15%.</p>
+    <div class="log"><span class="lk">Keyword Type 1</span><span class="lv">Tool + workflow keywords: "how to use [AI tool] for [task]" — high intent, low competition, evergreen</span><span class="badge bg">Primary</span></div>
+    <div class="log"><span class="lk">Keyword Type 2</span><span class="lv">Trend roundup keywords: "best AI automation tools [year]" — recurring, update annually, high traffic</span><span class="badge bg">Primary</span></div>
+    <div class="log"><span class="lk">Keyword Type 3</span><span class="lv">Problem keywords: "how to automate [specific workflow]" — maps directly to issue content</span><span class="badge bd">Secondary</span></div>
+    <div class="log"><span class="lk">Keyword Type 4</span><span class="lv">Comparison keywords: "[Tool A] vs [Tool B]" — buyer intent, converts to paid tier at higher rate</span><span class="badge bd">Secondary</span></div>
+    <div class="log"><span class="lk">Research Tools</span><span class="lv">Ahrefs · Semrush · Google Search Console · AnswerThePublic. Prioritize by: intent score × competition × monthly search volume</span><span class="badge bd">Use</span></div>
+    <hr class="dv">
+    <div class="co"><p><strong>Keyword Mapping Rule:</strong> Each archived issue targets exactly one primary keyword and two secondary keywords. Never try to rank a single page for more than 3 keywords — dilutes relevance signal.</p></div>
+  </div></div>
+
+  <div class="mod" id="seo02"><button class="mb2" onclick="tog('seo02')" aria-expanded="false"><div class="mn">SE2</div><div class="mm"><span class="mc">SEO · Page Structure</span><span class="mt2">Archive Page Structure &amp; On-Page SEO</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="seo-row"><span class="seo-k">URL Structure</span><span class="seo-v">/archive/[year]/[keyword-slug] — descriptive, not issue number. Example: /archive/2025/ai-automation-workflow-tools — not /archive/issue-42</span><span class="badge bg">Required</span></div>
+    <div class="seo-row"><span class="seo-k">Title Tag</span><span class="seo-v">Primary keyword in first 60 characters. Include newsletter name at end: "How to Automate [X] with AI — AI Automation Weekly"</span><span class="badge bg">Required</span></div>
+    <div class="seo-row"><span class="seo-k">Meta Description</span><span class="seo-v">Under 155 characters. Include primary keyword + CTA verb. "Learn how to [outcome] — plus [secondary benefit]. Subscribe free →"</span><span class="badge bg">Required</span></div>
+    <div class="seo-row"><span class="seo-k">H1</span><span class="seo-v">Includes primary keyword. Different from email subject line — optimized for search, not open rate.</span><span class="badge bg">Required</span></div>
+    <div class="seo-row"><span class="seo-k">Intro Paragraph</span><span class="seo-v">Primary keyword in first 100 words. States exactly what the page covers. No warm-up prose.</span><span class="badge bg">Required</span></div>
+    <div class="seo-row"><span class="seo-k">Internal Links</span><span class="seo-v">Link 3+ related archive issues per page. Use descriptive anchor text matching target keywords of linked pages.</span><span class="badge bd">Important</span></div>
+    <div class="seo-row"><span class="seo-k">Newsletter CTA</span><span class="seo-v">Sticky subscribe CTA at top and bottom of every archive page. "Reading this on the web? Get it in your inbox free →"</span><span class="badge bg">Required</span></div>
+    <div class="seo-row"><span class="seo-k">Schema Markup</span><span class="seo-v">Article schema JSON-LD: headline, datePublished, dateModified, author, publisher. Improves Google rich result eligibility.</span><span class="badge bd">Important</span></div>
+    <div class="seo-row"><span class="seo-k">Image Alt Text</span><span class="seo-v">Every image on archive page has descriptive alt text including keyword where natural. Never keyword-stuffed.</span><span class="badge bg">Required</span></div>
+    <div class="seo-row" style="border:none"><span class="seo-k">Canonical Tag</span><span class="seo-v">Self-referencing canonical URL on every archive page. Prevents duplicate content issues from ESP-hosted version.</span><span class="badge bg">Required</span></div>
+  </div></div>
+
+  <div class="mod" id="seo03"><button class="mb2" onclick="tog('seo03')" aria-expanded="false"><div class="mn">SE3</div><div class="mm"><span class="mc">SEO · Content Strategy</span><span class="mt2">Archive Content &amp; Update Strategy</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="flow"><div class="fn">1</div><div class="fd2"><div class="ft">Gate vs. Open Decision</div><div class="fs">Free tier issues: fully public for SEO. Premium deep dive sections: gate behind email capture (not paywall). Requiring an email — not a credit card — maximizes subscriber conversion from organic traffic.</div></div></div>
+    <div class="flow"><div class="fn">2</div><div class="fd2"><div class="ft">Publish Archive Immediately</div><div class="fs">Publish archive page same day as newsletter send. Google indexes quickly — there is no value in delaying. Each day of delay is a day of potential ranking lost.</div></div></div>
+    <div class="flow"><div class="fn">3</div><div class="fd2"><div class="ft">Annual Evergreen Updates</div><div class="fs">Every January: update all "Best AI tools [year]" and roundup archive pages with current year in title. Update content to reflect current tool landscape. Update dateModified in schema. This alone can 3× organic traffic on top-performing pages.</div></div></div>
+    <div class="flow"><div class="fn">4</div><div class="fd2"><div class="ft">Topic Cluster Architecture</div><div class="fs">Group related archive issues into topic clusters. One "pillar page" (comprehensive guide) links to 5–8 "cluster pages" (specific issues). Example: Pillar = "AI Automation for [ICP]" → Clusters = each tool and workflow issue.</div></div></div>
+    <div class="flow"><div class="fn">5</div><div class="fd2"><div class="ft">Google Search Console Monitoring</div><div class="fs">Connect archive domain to GSC on day one. Review weekly: which pages are getting impressions, what queries are triggering them, and which are ranking on page 2 (most actionable for quick wins).</div></div></div>
+    <div class="log mt2"><span class="lk">Timeline Expectation</span><span class="lv">SEO compounds over 12–18 months. First meaningful organic traffic at 6 months. Significant acquisition impact at 12 months with consistent publishing.</span><span class="badge bd">Reality</span></div>
+    <div class="log"><span class="lk">Publishing Cadence</span><span class="lv">One new archive page per newsletter issue. Never batch-publish 20 old issues at once — Google sees this as a manipulation signal.</span><span class="badge bd">Rule</span></div>
+  </div></div>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: DELIVERABILITY (from v2)
+══════════════════════════════════════════════════════════ -->
+<main class="page" id="page-deliverability">
+  <div class="shd mt2"><div class="sic">📡</div><div><div class="slb">Infrastructure</div><h2 class="ts">Email Deliverability Setup</h2></div></div>
+  <p class="tm mb3">Deliverability is the foundation. Without it, all content strategy is wasted. Complete this module before any email is sent — including test sends.</p>
+
+  <div class="mod" id="d01"><button class="mb2" onclick="tog('d01')" aria-expanded="false"><div class="mn">D1</div><div class="mm"><span class="mc">DNS · Authentication</span><span class="mt2">DNS Authentication Records (SPF, DKIM, DMARC)</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="log"><span class="lk">SPF Record</span><span class="lv">TXT record authorizing which mail servers can send from your domain. Include all ESP server addresses.</span><span class="badge ba">Critical</span></div>
+    <div class="log"><span class="lk">DKIM Record</span><span class="lv">Cryptographic signature proving email integrity in transit. Generated by ESP — add CNAME or TXT to DNS.</span><span class="badge ba">Critical</span></div>
+    <div class="log"><span class="lk">DMARC Record</span><span class="lv">Policy for SPF/DKIM failures. Start p=none → p=quarantine (day 30) → p=reject (day 60).</span><span class="badge ba">Critical</span></div>
+    <div class="log"><span class="lk">Sending Subdomain</span><span class="lv">Use news.clientdomain.com — isolates newsletter reputation from main domain. Required for any client with existing email infrastructure.</span><span class="badge bg">Required</span></div>
+    <div class="cb mt2">
+      <span class="cm"># SPF — TXT record on sending domain</span><br>
+      <span class="ck">Type:</span> <span class="cv">TXT</span>  <span class="ck">Host:</span> <span class="cv">@</span>  <span class="ck">Value:</span> <span class="cv">v=spf1 include:[ESP-server] ~all</span><br><br>
+      <span class="cm"># DKIM — add as CNAME or TXT (ESP generates)</span><br>
+      <span class="ck">Type:</span> <span class="cv">CNAME</span>  <span class="ck">Host:</span> <span class="cv">s1._domainkey</span>  <span class="ck">Value:</span> <span class="cv">[ESP-provided-key]</span><br><br>
+      <span class="cm"># DMARC — start monitoring, then enforce</span><br>
+      <span class="ck">Type:</span> <span class="cv">TXT</span>  <span class="ck">Host:</span> <span class="cv">_dmarc</span>  <span class="ck">Value:</span> <span class="cv">v=DMARC1; p=none; rua=mailto:dmarc@domain.com</span>
+    </div>
+  </div></div>
+
+  <div class="mod" id="d02"><button class="mb2" onclick="tog('d02')" aria-expanded="false"><div class="mn">D2</div><div class="mm"><span class="mc">Warmup · Protocol</span><span class="mt2">Domain Warming Protocol</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="log"><span class="lk">Week 1</span><span class="lv">50–100 most engaged contacts only. Monitor open rate, complaint rate. No cold imports.</span><span class="badge bd">Start</span></div>
+    <div class="log"><span class="lk">Week 2–3</span><span class="lv">Scale to 250–500. Confirmed opt-ins only. Complaint rate must stay under 0.08%.</span><span class="badge bd">Ramp</span></div>
+    <div class="log"><span class="lk">Week 4–5</span><span class="lv">Scale to 1,000–2,500. Send engagement segment first each issue.</span><span class="badge bd">Scale</span></div>
+    <div class="log"><span class="lk">Week 6–8</span><span class="lv">Full list. Graduate DMARC from p=none to p=quarantine after 30 clean days.</span><span class="badge bd">Full</span></div>
+    <div class="log"><span class="lk">Gmail 2024 Rules</span><span class="lv">SPF + DKIM + DMARC mandatory for 5K+/day · One-click unsubscribe required · Spam rate under 0.1%</span><span class="badge ba">Mandatory</span></div>
+  </div></div>
+
+  <div class="mod" id="d03"><button class="mb2" onclick="tog('d03')" aria-expanded="false"><div class="mn">D3</div><div class="mm"><span class="mc">List · Hygiene</span><span class="mt2">List Hygiene &amp; Health Management</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="log"><span class="lk">Hard Bounces</span><span class="lv">Remove immediately. Never resend. Add to global suppression list.</span><span class="badge ba">Immediate</span></div>
+    <div class="log"><span class="lk">Soft Bounces</span><span class="lv">Suppress after 3 consecutive bounces. Investigate if rate spikes above 2%.</span><span class="badge bd">3-Strike</span></div>
+    <div class="log"><span class="lk">Engagement Segments</span><span class="lv">Active: opened last 60d · At Risk: 61–120d · Cold: 120d+. Review monthly.</span><span class="badge bd">Monthly</span></div>
+    <div class="log"><span class="lk">Re-engagement</span><span class="lv">3-email win-back to "At Risk": highlight → personal note → "stay or leave" final with unsubscribe prompt</span><span class="badge bd">Automate</span></div>
+    <div class="log"><span class="lk">Sunset Protocol</span><span class="lv">Cold 120d+ after re-engagement attempt: suppress from future sends. Keep in suppression list forever.</span><span class="badge ba">Required</span></div>
+    <div class="log"><span class="lk">Never Purchase Lists</span><span class="lv">Purchased lists contain spam traps. One spam trap can permanently destroy domain reputation.</span><span class="badge br">Never</span></div>
+  </div></div>
+
+  <div class="mod" id="d04"><button class="mb2" onclick="tog('d04')" aria-expanded="false"><div class="mn">D4</div><div class="mm"><span class="mc">Pre-Send · Spam Score</span><span class="mt2">Spam Score Optimization</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <p class="tm mb2">Run Mail-Tester.com on every issue before send. Target score &gt;8/10. These are the highest-impact factors:</p>
+    <div class="sprow"><span class="spf">ALL CAPS words in subject line</span><span class="spi hi">High Risk</span></div>
+    <div class="sprow"><span class="spf">Spam trigger words (free, guarantee, click now)</span><span class="spi hi">High Risk</span></div>
+    <div class="sprow"><span class="spf">Image-only email with no text content</span><span class="spi hi">High Risk</span></div>
+    <div class="sprow"><span class="spf">Missing physical mailing address in footer</span><span class="spi hi">Instant Flag</span></div>
+    <div class="sprow"><span class="spf">Missing functional unsubscribe link</span><span class="spi hi">Instant Block</span></div>
+    <div class="sprow"><span class="spf">Too many links relative to text length</span><span class="spi mid">Medium Risk</span></div>
+    <div class="sprow"><span class="spf">No plain text version paired with HTML</span><span class="spi mid">Medium Risk</span></div>
+    <div class="sprow"><span class="spf">Unverified sending domain (no SPF/DKIM)</span><span class="spi mid">Medium Risk</span></div>
+    <div class="sprow"><span class="spf">Valid SPF + DKIM + DMARC</span><span class="spi lo">Positive Signal</span></div>
+    <div class="sprow"><span class="spf">Consistent sender name across issues</span><span class="spi lo">Positive Signal</span></div>
+    <div class="sprow" style="border:none"><span class="spf">High historical open rate from recipient domain</span><span class="spi lo">Positive Signal</span></div>
+  </div></div>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: ACQUISITION (from v2)
+══════════════════════════════════════════════════════════ -->
+<main class="page" id="page-acquisition">
+  <div class="shd mt2"><div class="sic">📈</div><div><div class="slb">Growth</div><h2 class="ts">Subscriber Acquisition Playbook</h2></div></div>
+  <p class="tm mb3">Growth is a system. Build multiple acquisition channels in parallel. No single channel should represent more than 40% of new subscriber volume.</p>
+
+  <div class="mod" id="a01"><button class="mb2" onclick="tog('a01')" aria-expanded="false"><div class="mn">A1</div><div class="mm"><span class="mc">Acquisition · Magnet</span><span class="mt2">Lead Magnet Design Framework</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="log"><span class="lk">Magnet Type 1</span><span class="lv">Curated Resource List — "47 AI Tools We Actually Use" — high value, low production cost</span><span class="badge bg">Best</span></div>
+    <div class="log"><span class="lk">Magnet Type 2</span><span class="lv">Workflow Template — SOP or Airtable base directly tied to newsletter content</span><span class="badge bg">Best</span></div>
+    <div class="log"><span class="lk">Magnet Type 3</span><span class="lv">Prompt Pack — 25 prompts for AI content automation — instantly applicable</span><span class="badge bd">Good</span></div>
+    <div class="log"><span class="lk">Quality Test</span><span class="lv">Would someone pay $9–$19 for this? If not, improve it. High-value magnets produce lower churn.</span><span class="badge ba">Validate</span></div>
+    <div class="log"><span class="lk">Delivery</span><span class="lv">Deliver in welcome email #1 — not after confirmation. Direct download link. Zero friction.</span><span class="badge bd">Automate</span></div>
+  </div></div>
+
+  <div class="mod" id="a02"><button class="mb2" onclick="tog('a02')" aria-expanded="false"><div class="mn">A2</div><div class="mm"><span class="mc">Acquisition · Channels</span><span class="mt2">Multi-Channel Growth Strategy</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="log"><span class="lk">LinkedIn (B2B)</span><span class="lv">3 posts/week: issue preview · tool breakdown · contrarian take. Bio link to signup. Newsletter feature on.</span><span class="badge bg">Primary B2B</span></div>
+    <div class="log"><span class="lk">X / Twitter</span><span class="lv">Thread from each issue weekly. Post Thursday AM. Link to signup in thread reply, not OP.</span><span class="badge bg">Primary Tech</span></div>
+    <div class="log"><span class="lk">YouTube Shorts</span><span class="lv">60-second tool or workflow per issue. Link in description + pinned comment. Lowest CPL long-term.</span><span class="badge bd">Compound</span></div>
+    <div class="log"><span class="lk">Newsletter Swaps</span><span class="lv">Reciprocal promotions with complementary newsletters. CPM-matched. Track signup source attribution.</span><span class="badge bd">Partner</span></div>
+    <div class="log"><span class="lk">Product Hunt</span><span class="lv">Launch newsletter as a product. Prepare 50 supporters ahead. 200–500 new subs from one launch.</span><span class="badge bd">Event</span></div>
+    <div class="log"><span class="lk">Beehiiv Boosts</span><span class="lv">Pay per verified subscriber. Set max CPL. Test with $200 first. Only after organic validation.</span><span class="badge bd">Paid</span></div>
+    <div class="formula">
+      <div class="feq">CPL = Total Spend ÷ New Subscribers</div>
+      <div class="fds">Track CPL per channel monthly. Fund channels where CPL &lt; 30-day ARPU.<br>Pause any channel with CPL &gt; 2× target for 60+ consecutive days.</div>
+    </div>
+  </div></div>
+
+  <div class="mod" id="a03"><button class="mb2" onclick="tog('a03')" aria-expanded="false"><div class="mn">A3</div><div class="mm"><span class="mc">Acquisition · Welcome</span><span class="mt2">Welcome Sequence Architecture</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="flow"><div class="fn">E1</div><div class="fd2"><div class="ft">Email 1 — 0 Minutes (Immediate)</div><div class="fs">Deliver lead magnet. Introduce editor by name. State what to expect and when. Under 150 words. No selling. Every word must earn its place.</div></div></div>
+    <div class="flow"><div class="fn">E2</div><div class="fd2"><div class="ft">Email 2 — Day 1</div><div class="fs">Share single best archive piece. Frame as "what subscribers say changed how they work." End with one reply-prompt question to boost deliverability signals.</div></div></div>
+    <div class="flow"><div class="fn">E3</div><div class="fd2"><div class="ft">Email 3 — Day 3</div><div class="fs">Best issue ever published. Show full content depth. Introduce paid tier naturally — not as a pitch, as a recommendation. Founding rate if applicable.</div></div></div>
+    <div class="flow"><div class="fn">E4</div><div class="fd2"><div class="ft">Email 4 — Day 7</div><div class="fs">"Reply with your biggest AI automation challenge." Responses become future content. Converts passive readers into engaged community members and boosts inbox placement.</div></div></div>
+  </div></div>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: COPYWRITING (from v2)
+══════════════════════════════════════════════════════════ -->
+<main class="page" id="page-copywriting">
+  <div class="shd mt2"><div class="sic">✍️</div><div><div class="slb">Copy System</div><h2 class="ts">Copywriting Framework</h2></div></div>
+  <p class="tm mb3">Copy drives every action: opens, clicks, upgrades, referrals. Every copywriting element in the newsletter follows a documented system — not intuition.</p>
+
+  <div class="mod" id="c01"><button class="mb2" onclick="tog('c01')" aria-expanded="false"><div class="mn">C1</div><div class="mm"><span class="mc">Copywriting · Open Rate</span><span class="mt2">Subject Line System</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <p class="tm mb2">Build a rotating formula library. A/B test every issue. Never repeat a formula two weeks in a row. Log every result.</p>
+    <div class="slc"><span class="sln">F1</span><span class="slt">Why [common belief] is wrong about [AI topic]</span><span class="sltp">Contrarian</span></div>
+    <div class="slc"><span class="sln">F2</span><span class="slt">[Specific tool] just changed [specific workflow]</span><span class="sltp">News Hook</span></div>
+    <div class="slc"><span class="sln">F3</span><span class="slt">The [X]-step system for [specific outcome]</span><span class="sltp">Utility</span></div>
+    <div class="slc"><span class="sln">F4</span><span class="slt">I was wrong about [topic]. Here's what changed my mind</span><span class="sltp">Personal POV</span></div>
+    <div class="slc"><span class="sln">F5</span><span class="slt">[Big company] did [surprising thing]. Here's what it means</span><span class="sltp">Authority</span></div>
+    <div class="slc"><span class="sln">F6</span><span class="slt">The AI tools [ICP] are actually using in [current month]</span><span class="sltp">Curation</span></div>
+    <div class="slc"><span class="sln">F7</span><span class="slt">Stop doing [X]. Do this instead.</span><span class="sltp">Directive</span></div>
+    <div class="slc"><span class="sln">F8</span><span class="slt">[Number] things about [topic] nobody talks about</span><span class="sltp">List</span></div>
+    <hr class="dv">
+    <div class="log"><span class="lk">Length Rule</span><span class="lv">Target 35–50 characters. Never over 60. Mobile truncates early — test in real inbox.</span><span class="badge bd">Rule</span></div>
+    <div class="log"><span class="lk">Preview Text</span><span class="lv">Write manually every issue. 40–90 chars. Extend the hook — never repeat subject line.</span><span class="badge bd">Rule</span></div>
+    <div class="log"><span class="lk">A/B Testing</span><span class="lv">One variable per test. Log winner formula. Build a winner library over time.</span><span class="badge bg">Process</span></div>
+  </div></div>
+
+  <div class="mod" id="c02"><button class="mb2" onclick="tog('c02')" aria-expanded="false"><div class="mn">C2</div><div class="mm"><span class="mc">Copywriting · CTA</span><span class="mt2">CTA Architecture System</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <p class="tm mb2">One primary CTA per issue. Rotating 4-week cycle. Write CTAs as outcomes, not actions.</p>
+    <div class="log"><span class="lk">Week 1 — Referral</span><span class="lv">"Your next free prompt pack is 2 referrals away →" Not "Share with a friend"</span><span class="badge bg">Rotate 1</span></div>
+    <div class="log"><span class="lk">Week 2 — Sponsor</span><span class="lv">Native in tone. Integrate into issue voice. One sentence before link. Disclosure above CTA.</span><span class="badge bd">Rotate 2</span></div>
+    <div class="log"><span class="lk">Week 3 — Upgrade</span><span class="lv">"Premium members got the full workflow with config. Upgrade to read →" — specific, not vague</span><span class="badge bg">Rotate 3</span></div>
+    <div class="log"><span class="lk">Week 4 — Product</span><span class="lv">Story-led. Connect product to this issue's exact problem. Proof before pitch. Never cold.</span><span class="badge bd">Rotate 4</span></div>
+    <div class="co mt2"><p><strong>Placement:</strong> Free issues under 700 words — one CTA at end only. Premium issues 1,200+ words — soft mid-issue mention + primary CTA at end. Never open with a CTA.</p></div>
+  </div></div>
+
+  <div class="mod" id="c03"><button class="mb2" onclick="tog('c03')" aria-expanded="false"><div class="mn">C3</div><div class="mm"><span class="mc">Copywriting · Repurposing</span><span class="mt2">Content Repurposing Workflow</span></div><span class="mch"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></span></button>
+  <div class="mbd">
+    <div class="flow"><div class="fn">📧</div><div class="fd2"><div class="ft">Source: Newsletter Issue</div><div class="fs">All repurposing flows from the published issue. Never repurpose before sending the newsletter.</div></div></div>
+    <div class="flow"><div class="fn">🔗</div><div class="fd2"><div class="ft">LinkedIn Post (Same Day)</div><div class="fs">Extract lead insight → 150–300 word post → hook in line 1 → value in body → CTA to newsletter in first comment (not caption).</div></div></div>
+    <div class="flow"><div class="fn">🐦</div><div class="fd2"><div class="ft">X Thread (Day 2)</div><div class="fs">Signal Section → 5–8 tweet thread. Tweet 1 = hook. Tweets 2–6 = one item each. Last tweet = subscribe link. Stagger 24h after LinkedIn.</div></div></div>
+    <div class="flow"><div class="fn">🎥</div><div class="fd2"><div class="ft">YouTube Short (Week 2)</div><div class="fs">60-second screen recording of workflow or tool section. No editing required. Title = subject line. Signup link in description.</div></div></div>
+    <div class="flow"><div class="fn">🌐</div><div class="fd2"><div class="ft">SEO Archive (Same Day)</div><div class="fs">Publish to public archive. Optimize for primary keyword. Internal links to related issues. This is the compounding asset that makes all other channels more effective.</div></div></div>
+  </div></div>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: CHECKLIST
+══════════════════════════════════════════════════════════ -->
+<main class="page" id="page-checklist">
+  <div class="shd mt2"><div class="sic">✅</div><div><div class="slb">Action System</div><h2 class="ts">Complete Launch Checklist</h2></div></div>
+  <div class="fx jb ac mb1"><span class="tx"><span class="ld"></span>Progress</span><span class="gbp" id="cPct">0%</span></div>
+  <div class="pt mb3"><div class="pf" id="cFill" style="width:0%"></div></div>
+
+  <div class="card mb2">
+    <div class="cgtt">Phase 1 — Discovery &amp; Strategy</div>
+    <div class="chk"><input type="checkbox" id="q1" class="t"><label for="q1">Complete client discovery brief — goals, audience, budget, timeline, success metrics</label></div>
+    <div class="chk"><input type="checkbox" id="q2" class="t"><label for="q2">Audit 5 competitor newsletters — format, cadence, monetization, CTR signals</label></div>
+    <div class="chk"><input type="checkbox" id="q3" class="t"><label for="q3">Write one-sentence niche thesis and positioning statement</label></div>
+    <div class="chk"><input type="checkbox" id="q4" class="t"><label for="q4">Build brand vocabulary — 10 in, 10 out — embed in all AI system prompts</label></div>
+    <div class="chk"><input type="checkbox" id="q5" class="t"><label for="q5">Plot newsletter on Depth × Sophistication positioning matrix</label></div>
+    <div class="chk"><input type="checkbox" id="q6" class="t"><label for="q6">Set north star KPI and secondary metrics before any build begins</label></div>
+  </div>
+
+  <div class="card mb2">
+    <div class="cgtt">Phase 2 — AI Prompt Library Setup</div>
+    <div class="chk"><input type="checkbox" id="q7" class="t"><label for="q7">Write master brand voice system prompt (P1) with full vocabulary lock</label></div>
+    <div class="chk"><input type="checkbox" id="q8" class="t"><label for="q8">Configure curation scoring prompt (P2) — set relevance threshold at 28/40</label></div>
+    <div class="chk"><input type="checkbox" id="q9" class="t"><label for="q9">Build and test all section prompts (P3–P7) against brand voice output</label></div>
+    <div class="chk"><input type="checkbox" id="q10" class="t"><label for="q10">Deploy subject line generator prompt (P8) — link to A/B test tracking sheet</label></div>
+    <div class="chk"><input type="checkbox" id="q11" class="t"><label for="q11">Write all 4 welcome sequence emails using P9 — test before automating</label></div>
+    <div class="chk"><input type="checkbox" id="q12" class="t"><label for="q12">Configure SEO optimizer prompt (P10) — link to archive publishing workflow</label></div>
+  </div>
+
+  <div class="card mb2">
+    <div class="cgtt">Phase 2 — Deliverability Infrastructure</div>
+    <div class="chk"><input type="checkbox" id="q13" class="t"><label for="q13">Register sending subdomain (news.clientdomain.com) — isolate from main domain</label></div>
+    <div class="chk"><input type="checkbox" id="q14" class="t"><label for="q14">Configure SPF record and verify with MXToolbox</label></div>
+    <div class="chk"><input type="checkbox" id="q15" class="t"><label for="q15">Configure DKIM record via ESP — verify propagation</label></div>
+    <div class="chk"><input type="checkbox" id="q16" class="t"><label for="q16">Configure DMARC at p=none with reporting email — schedule upgrade to p=quarantine at day 30</label></div>
+    <div class="chk"><input type="checkbox" id="q17" class="t"><label for="q17">Set up Google Postmaster Tools — connect sending domain</label></div>
+    <div class="chk"><input type="checkbox" id="q18" class="t"><label for="q18">Verify List-Unsubscribe header enabled at ESP level</label></div>
+  </div>
+
+  <div class="card mb2">
+    <div class="cgtt">Phase 2 — Email Template &amp; ESP Setup</div>
+    <div class="chk"><input type="checkbox" id="q19" class="t"><label for="q19">Select and configure ESP — Beehiiv, ConvertKit, or Substack</label></div>
+    <div class="chk"><input type="checkbox" id="q20" class="t"><label for="q20">Design and lock HTML email template — all sections documented</label></div>
+    <div class="chk"><input type="checkbox" id="q21" class="t"><label for="q21">Test template in Litmus or Email on Acid across Gmail, Apple Mail, Outlook, iOS</label></div>
+    <div class="chk"><input type="checkbox" id="q22" class="t"><label for="q22">Verify dark mode rendering — logo visibility, text contrast</label></div>
+    <div class="chk"><input type="checkbox" id="q23" class="t"><label for="q23">Create and test plain text version of template</label></div>
+    <div class="chk"><input type="checkbox" id="q24" class="t"><label for="q24">Build automation pipeline — ingestion, curation, draft, QA, publish</label></div>
+  </div>
+
+  <div class="card mb2">
+    <div class="cgtt">Phase 3 — Legal, Compliance &amp; Pre-Launch</div>
+    <div class="chk"><input type="checkbox" id="q25" class="t"><label for="q25">Physical mailing address in all email footers (CAN-SPAM)</label></div>
+    <div class="chk"><input type="checkbox" id="q26" class="t"><label for="q26">Functional one-click unsubscribe tested and working</label></div>
+    <div class="chk"><input type="checkbox" id="q27" class="t"><label for="q27">Privacy policy published — data collection, storage, rights</label></div>
+    <div class="chk"><input type="checkbox" id="q28" class="t"><label for="q28">GDPR consent flow at signup if EU audience targeted</label></div>
+    <div class="chk"><input type="checkbox" id="q29" class="t"><label for="q29">AI disclosure policy defined and added to brand style guide</label></div>
+    <div class="chk"><input type="checkbox" id="q30" class="t"><label for="q30">FTC-compliant affiliate and sponsorship disclosure templates ready</label></div>
+    <div class="chk"><input type="checkbox" id="q31" class="t"><label for="q31">Run 3 complete test issues through pipeline — spam score under 2/10 each time</label></div>
+    <div class="chk"><input type="checkbox" id="q32" class="t"><label for="q32">All links verified with UTM parameters — no broken links</label></div>
+  </div>
+
+  <div class="card mb2">
+    <div class="cgtt">Phase 3 — Lead Magnet &amp; Landing Page</div>
+    <div class="chk"><input type="checkbox" id="q33" class="t"><label for="q33">Lead magnet created — validates at $9–$19 value threshold</label></div>
+    <div class="chk"><input type="checkbox" id="q34" class="t"><label for="q34">Landing page live — headline, proof, issue preview, single CTA form</label></div>
+    <div class="chk"><input type="checkbox" id="q35" class="t"><label for="q35">Welcome sequence (4 emails) tested and automation confirmed live</label></div>
+    <div class="chk"><input type="checkbox" id="q36" class="t"><label for="q36">Onboarding survey live in welcome email 2 — role, challenge, preference questions</label></div>
+  </div>
+
+  <div class="card mb2">
+    <div class="cgtt">Phase 3 — Domain Warmup</div>
+    <div class="chk"><input type="checkbox" id="q37" class="t"><label for="q37">Week 1 warmup batch sent to 50–100 most engaged contacts</label></div>
+    <div class="chk"><input type="checkbox" id="q38" class="t"><label for="q38">Volume scaled per warmup schedule — no cold imports during warmup period</label></div>
+    <div class="chk"><input type="checkbox" id="q39" class="t"><label for="q39">Spam complaint rate monitored in Postmaster — stays under 0.05%</label></div>
+    <div class="chk"><input type="checkbox" id="q40" class="t"><label for="q40">DMARC graduated from p=none to p=quarantine after 30 clean days</label></div>
+  </div>
+
+  <div class="card mb2">
+    <div class="cgtt">Phase 4 — Launch &amp; Sponsor Sales</div>
+    <div class="chk"><input type="checkbox" id="q41" class="t"><label for="q41">Issue #1 published — all automation stages verified end-to-end</label></div>
+    <div class="chk"><input type="checkbox" id="q42" class="t"><label for="q42">Media kit completed — demographics, placement options, rate card, process</label></div>
+    <div class="chk"><input type="checkbox" id="q43" class="t"><label for="q43">Sponsor CRM set up in Airtable — all pipeline stages configured</label></div>
+    <div class="chk"><input type="checkbox" id="q44" class="t"><label for="q44">First 20 sponsor prospects identified and qualified — outreach begun</label></div>
+    <div class="chk"><input type="checkbox" id="q45" class="t"><label for="q45">Referral program activated at 500 subscribers — SparkLoop or Beehiiv native</label></div>
+    <div class="chk"><input type="checkbox" id="q46" class="t"><label for="q46">Repurposing workflow automated — LinkedIn and X drafts triggered post-send</label></div>
+    <div class="chk"><input type="checkbox" id="q47" class="t"><label for="q47">SEO archive page published for Issue #1 — keyword optimized, schema marked up</label></div>
+    <div class="chk"><input type="checkbox" id="q48" class="t"><label for="q48">Google Search Console connected to archive domain</label></div>
+  </div>
+
+  <div class="card mb2">
+    <div class="cgtt">Phase 4 — Paid Tier Launch</div>
+    <div class="chk"><input type="checkbox" id="q49" class="t"><label for="q49">Paid upgrade page live — headline, specifics, social proof, pricing, guarantee</label></div>
+    <div class="chk"><input type="checkbox" id="q50" class="t"><label for="q50">Paywall gate copy written and placed in correct issue position (after section 3)</label></div>
+    <div class="chk"><input type="checkbox" id="q51" class="t"><label for="q51">Founding member launch sequence (4 emails) written and scheduled</label></div>
+    <div class="chk"><input type="checkbox" id="q52" class="t"><label for="q52">Founding rate set — 25–35% below regular rate, cap at 100 members</label></div>
+    <div class="chk"><input type="checkbox" id="q53" class="t"><label for="q53">Automated upgrade triggers configured — issue #3 reader, high-open, paywall click</label></div>
+    <div class="chk"><input type="checkbox" id="q54" class="t"><label for="q54">Churn exit survey automation live on unsubscribe trigger</label></div>
+  </div>
+
+  <div class="card mb2">
+    <div class="cgtt">Client Handoff Deliverables</div>
+    <div class="chk"><input type="checkbox" id="q55" class="t"><label for="q55">Complete SOP library — every production step documented</label></div>
+    <div class="chk"><input type="checkbox" id="q56" class="t"><label for="q56">All account logins and billing transferred to client ownership</label></div>
+    <div class="chk"><input type="checkbox" id="q57" class="t"><label for="q57">Brand and voice guide delivered — tone, vocabulary, templates, system</label></div>
+    <div class="chk"><input type="checkbox" id="q58" class="t"><label for="q58">Automation workflow diagram delivered — all triggers, outputs, fallbacks</label></div>
+    <div class="chk"><input type="checkbox" id="q59" class="t"><label for="q59">Loom walkthroughs recorded — daily ops, automation, analytics</label></div>
+    <div class="chk"><input type="checkbox" id="q60" class="t"><label for="q60">90-day post-handoff growth roadmap delivered</label></div>
+    <div class="chk"><input type="checkbox" id="q61" class="t"><label for="q61">Support window terms confirmed in contract — scope, SLA, closing date</label></div>
+    <div class="chk"><input type="checkbox" id="q62" class="t"><label for="q62">30-day and 60-day post-handoff check-in calls scheduled</label></div>
+  </div>
+
+</main>
+
+</div><!-- /app -->
+
+<!-- ══════════════════════════════════════════════════════════
+     BOTTOM NAVIGATION
+══════════════════════════════════════════════════════════ -->
+<nav class="bnav" aria-label="Main navigation">
+  <div class="bni">
+
+    <button class="nb active" id="nb-overview" onclick="sp('overview')" aria-current="page" aria-label="Overview">
+      <div class="niw"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+      <span class="nlb">Home</span>
+    </button>
+
+    <button class="nb" id="nb-modules" onclick="sp('modules')" aria-label="Modules">
+      <div class="niw"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h10M4 18h7"/></svg></div>
+      <span class="nlb">Modules</span>
+    </button>
+
+    <button class="nb" id="nb-prompts" onclick="sp('prompts')" aria-label="Prompts">
+      <div class="niw"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <span class="nlb">Prompts</span>
+    </button>
+
+    <button class="nb" id="nb-template" onclick="sp('template')" aria-label="Template">
+      <div class="niw"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+      <span class="nlb">Template</span>
+    </button>
+
+    <button class="nb" id="nb-sponsor" onclick="sp('sponsor')" aria-label="Sponsor">
+      <div class="niw"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <span class="nlb">Sponsor</span>
+    </button>
+
+    <button class="nb" id="nb-paid" onclick="sp('paid')" aria-label="Paid Tier">
+      <div class="niw"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <span class="nlb">Paid</span>
+    </button>
+
+    <button class="nb" id="nb-checklist" onclick="sp('checklist')" aria-label="Checklist">
+      <div class="niw"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+      <span class="nlb">Checklist</span>
+    </button>
+
+  </div>
+</nav>
+
+<script>
+// ── PAGES ──────────────────────────────────────────────────────
+const PAGES=['overview','modules','prompts','template','sponsor','paid','seo','deliverability','acquisition','copywriting','checklist'];
+
+function sp(id){
+  PAGES.forEach(p=>{
+    document.getElementById('page-'+p)?.classList.remove('active');
+    const b=document.getElementById('nb-'+p);
+    if(b){b.classList.remove('active');b.removeAttribute('aria-current')}
+  });
+  document.getElementById('page-'+id)?.classList.add('active');
+  const ab=document.getElementById('nb-'+id);
+  if(ab){ab.classList.add('active');ab.setAttribute('aria-current','page')}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function jp(val){
+  if(!val)return;
+  sp(val);
+  setTimeout(()=>{document.querySelector('[aria-label="Jump to section"]').value=''},150);
+}
+
+// ── ACCORDION ──────────────────────────────────────────────────
+function tog(id){
+  const el=document.getElementById(id);
+  const btn=el.querySelector('.mb2');
+  const was=el.classList.contains('open');
+  document.querySelectorAll('.mod.open').forEach(m=>{
+    m.classList.remove('open');
+    m.querySelector('.mb2')?.setAttribute('aria-expanded','false');
+  });
+  if(!was){el.classList.add('open');btn.setAttribute('aria-expanded','true')}
+}
+
+// ── PROGRESS ───────────────────────────────────────────────────
+function upd(){
+  const all=document.querySelectorAll('.t');
+  const chk=document.querySelectorAll('.t:checked');
+  const pct=all.length?Math.round(chk.length/all.length*100):0;
+  document.getElementById('cPct').textContent=pct+'%';
+  document.getElementById('cFill').style.width=pct+'%';
+  document.getElementById('gPct').textContent=pct+'%';
+  document.getElementById('gFill').style.width=pct+'%';
+}
+document.querySelectorAll('.t').forEach(c=>c.addEventListener('change',upd));
+
+// ── KEYBOARD NAV ───────────────────────────────────────────────
+document.querySelectorAll('.pc').forEach(c=>{
+  c.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();c.click()}
+  });
+});
+
+upd();
+</script>
+</body>
+</html>
